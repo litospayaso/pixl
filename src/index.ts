@@ -1,4 +1,4 @@
 import '../phaser/phaser.js';
-import {init} from './init';
+import {Config} from './core/config';
 
-init();
+Config();
