@@ -36,5 +36,8 @@
     "webpack-dev-middleware": "^3.4.0",
     "webpack-dev-server": "^3.1.9",
     "xml-loader": "^1.2.1"
+  },
+  "dependencies": {
+    "tslint": "^5.11.0"
   }
 }

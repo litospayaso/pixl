@@ -4,22 +4,20 @@ export const Preloader = new Phaser.Class({
 
     Extends: Phaser.Scene,
 
-    initialize:
+    initialize() {
+        Phaser.Scene.call(this, { key: 'preloader' });
+    },
 
-        function Preloader() {
-            Phaser.Scene.call(this, { key: 'preloader' });
-        },
-
-    preload: function () {
+    preload() {
         this.load.image('buttonBG', 'assets/sprites/button-bg.png');
         this.load.image('ayu', 'assets/sprites/rick.png');
         this.load.image('ball', 'assets/sprites/pangball.png');
     },
 
-    create: function () {
+    create() {
         console.log('%c Preloader ', 'background: green; color: white; display: block;');
 
         this.scene.start('mainmenu');
-    }
+    },
 
 });
