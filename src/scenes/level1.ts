@@ -9,35 +9,26 @@ export const Level1 = new Phaser.Class({
     player: undefined,
     stars: undefined,
     scoreText: undefined,
+    positionText: undefined,
     score: 0,
     initialize() {
-        Phaser.Scene.call(this, { key: 'game' });
+        Phaser.Scene.call(this, { key: 'level1' });
         window['GAME'] = this;
-        // this.controls;
     },
 
     preload() {
-        this.load.image('sky', 'assets/sprites/sky.png');
-        this.load.image('ground', 'assets/sprites/platform.png');
-        this.load.image('star', 'assets/sprites/star.png');
-        this.load.image('bomb', 'assets/sprites/bomb.png');
         this.load.spritesheet('dude', 'assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
     },
 
     create() {
-        this.add.image(400, 300, 'sky');
 
-        this.platforms = this.physics.add.staticGroup();
-
-        this.platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-
-        this.platforms.create(600, 400, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
+        this.createBounds();
+        this.createPlatforms();
 
         this.player = this.physics.add.sprite(100, 450, 'dude');
 
-        this.player.setBounce(0.2);
+        this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
+
         this.player.setCollideWorldBounds(true);
 
         this.anims.create({
@@ -64,17 +55,20 @@ export const Level1 = new Phaser.Class({
 
         this.stars = this.physics.add.group({
             key: 'star',
-            repeat: 11,
+            repeat: 22,
             setXY: { x: 12, y: 0, stepX: 70 },
         });
 
+        console.log(this.stars);
+
         this.stars.children.iterate((child) => {
 
-            child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+            // child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
         });
 
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.stars, this.platforms);
@@ -83,6 +77,7 @@ export const Level1 = new Phaser.Class({
     },
 
     update() {
+        this.positionText.setText(`x: ${this.player.x};y: ${this.player.y};`);
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
 
@@ -98,7 +93,7 @@ export const Level1 = new Phaser.Class({
         }
 
         if (this.cursors.up.isDown && this.player.body.touching.down) {
-            this.player.setVelocityY(-330);
+            this.player.setVelocityY(-470);
         }
     },
 
@@ -106,10 +101,37 @@ export const Level1 = new Phaser.Class({
         star.disableBody(true, true);
 
         this.score += 10;
-        this.scoreText.setText('Score: ' + this.score);
+        this.scoreText.setText(`Score: ${this.score}`);
         if (this.score === 120) {
             this.scene.start('gameover');
         }
+    },
+
+    createBounds() {
+        this.cameras.main.setBounds(0, 0, 2400, 1200);
+        this.physics.world.setBounds(0, 0, 2400, 1200);
+
+        this.add.group({
+            key: 'sky',
+            repeat: 6,
+            setXY: { x: 400, y: 300, stepX: 400 },
+        });
+        this.add.group({
+            key: 'sky',
+            repeat: 6,
+            setXY: { x: 400, y: 900, stepX: 400 },
+        });
+    },
+
+    createPlatforms() {
+        this.platforms = this.physics.add.staticGroup();
+        for (let index = 200; index < 2400; index += 400) {
+            this.platforms.create(index, 1185, 'ground');
+        }
+        console.log(this.platforms);
+        this.platforms.create(600, 400, 'ground');
+        this.platforms.create(50, 250, 'ground');
+        this.platforms.create(750, 220, 'ground');
     },
 
 });

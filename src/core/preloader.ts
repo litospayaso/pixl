@@ -16,12 +16,16 @@ export const Preloader = new Phaser.Class({
         this.load.image('starSmall', 'assets/sprites/star.png');
         this.load.image('starBig', 'assets/sprites/star2.png');
         this.load.image('background', 'assets/sprites/background.png');
+        this.load.image('sky', 'assets/sprites/sky.png');
+        this.load.image('ground', 'assets/sprites/platform.png');
+        this.load.image('star', 'assets/sprites/star.png');
+        this.load.image('bomb', 'assets/sprites/bomb.png');
     },
 
     create() {
         console.log('%c Preloader ', 'background: green; color: white; display: block;');
 
-        this.scene.start('mainmenu');
+        this.scene.start('level1');
     },
 
 });

@@ -20,7 +20,7 @@ export const MainMenu = new Phaser.Class({
 
         bg.once('pointerup', function() {
 
-            this.scene.start('game');
+            this.scene.start('level1');
 
         }, this);
     },
