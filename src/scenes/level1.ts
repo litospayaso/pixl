@@ -21,7 +21,7 @@ export const Level1 = new Phaser.Class({
     },
 
     create() {
-
+        this.score = 0;
         this.createBounds();
         this.createPlatforms();
 
@@ -130,6 +130,12 @@ export const Level1 = new Phaser.Class({
         }
         console.log(this.platforms);
         this.platforms.create(600, 400, 'ground');
+        this.platforms.create(600, 1025, 'ground');
+        this.platforms.create(1200, 900, 'ground');
+        this.platforms.create(1800, 800, 'ground');
+        this.platforms.create(1200, 700, 'ground');
+        this.platforms.create(600, 600, 'ground');
+        this.platforms.create(200, 500, 'ground');
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
     },
