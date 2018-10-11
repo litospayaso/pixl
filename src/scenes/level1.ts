@@ -61,8 +61,6 @@ export const Level1 = new Phaser.Class({
             setXY: { x: 12, y: 0, stepX: 70 },
         });
 
-        console.log(this.stars);
-
         this.stars.children.iterate((child) => {
 
             // child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
@@ -73,10 +71,11 @@ export const Level1 = new Phaser.Class({
         this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
-        this.physics.add.collider(this.player, this.elevators);
+        this.physics.add.collider(this.player, this.elevators, this.setBottomBlocked, null, this);
         this.physics.add.collider(this.stars, this.platforms);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
+        // this.physics.add.overlap(this.player, this.elevators, this.setBottomBlocked, null, this);
     },
 
     update() {
@@ -95,7 +94,8 @@ export const Level1 = new Phaser.Class({
             this.player.anims.play('turn');
         }
 
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
+        // if (this.cursors.up.isDown && this.player.body.touching.down) {
+        if (this.cursors.up.isDown && this.player.body.blocked.down) {
             this.player.setVelocityY(-470);
         }
     },
@@ -107,6 +107,13 @@ export const Level1 = new Phaser.Class({
         this.scoreText.setText(`Score: ${this.score}`);
         if (this.score === 120) {
             this.scene.start('gameover');
+        }
+    },
+
+    setBottomBlocked(player) {
+        if (player.body.touching.down) {
+            this.player.body.blocked.down = true;
+            // console.log(this.player);
         }
     },
 
@@ -143,7 +150,7 @@ export const Level1 = new Phaser.Class({
 
         this.elevators = this.physics.add.group({ allowGravity: false });
 
-        this.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100).setFriction(1, 1, 1 ,1);
+        this.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100);
 
         this.elevators.children.iterate((child) => {
             this.time.addEvent({
