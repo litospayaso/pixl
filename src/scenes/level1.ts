@@ -11,6 +11,8 @@ export const Level1 = new Phaser.Class({
     scoreText: undefined,
     positionText: undefined,
     score: 0,
+    elevators: undefined,
+
     initialize() {
         Phaser.Scene.call(this, { key: 'level1' });
         window['GAME'] = this;
@@ -25,7 +27,7 @@ export const Level1 = new Phaser.Class({
         this.createBounds();
         this.createPlatforms();
 
-        this.player = this.physics.add.sprite(100, 450, 'dude');
+        this.player = this.physics.add.sprite(100, 1100, 'dude');
 
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
 
@@ -71,6 +73,7 @@ export const Level1 = new Phaser.Class({
         this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
         this.physics.add.collider(this.player, this.platforms);
+        this.physics.add.collider(this.player, this.elevators);
         this.physics.add.collider(this.stars, this.platforms);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
@@ -128,7 +131,6 @@ export const Level1 = new Phaser.Class({
         for (let index = 200; index < 2400; index += 400) {
             this.platforms.create(index, 1185, 'ground');
         }
-        console.log(this.platforms);
         this.platforms.create(600, 400, 'ground');
         this.platforms.create(600, 1025, 'ground');
         this.platforms.create(1200, 900, 'ground');
@@ -138,6 +140,20 @@ export const Level1 = new Phaser.Class({
         this.platforms.create(200, 500, 'ground');
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
+
+        this.elevators = this.physics.add.group({ allowGravity: false });
+
+        this.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100).setFriction(1, 1, 1 ,1);
+
+        this.elevators.children.iterate((child) => {
+            this.time.addEvent({
+                delay: 4000,
+                loop: true,
+                callback() {
+                    child.body.velocity.y *= -1;
+                },
+            });
+        });
     },
 
 });
