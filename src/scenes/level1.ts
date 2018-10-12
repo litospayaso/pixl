@@ -10,16 +10,15 @@ export const Level1 = new Phaser['Class']({
     positionText: undefined,
     score: 0,
     elevators: undefined,
+    enemies: undefined,
+    enemyWalls: undefined,
 
     initialize() {
         Phaser.Scene.call(this, { key: 'level1' });
         window['GAME'] = this;
-
     },
 
-    preload() {
-        this.load.spritesheet('dude', 'assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
-    },
+    // preload() {},
 
     create() {
         this.score = 0;
@@ -33,24 +32,33 @@ export const Level1 = new Phaser['Class']({
         this.player.setCollideWorldBounds(true);
 
         this.anims.create({
-            key: 'left',
+            key: 'playerLeft',
             frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1,
         });
 
         this.anims.create({
-            key: 'turn',
+            key: 'playerTurn',
             frames: [{ key: 'dude', frame: 4 }],
             frameRate: 20,
         });
 
         this.anims.create({
-            key: 'right',
+            key: 'droidLeft',
+            frames: this.anims.generateFrameNumbers('droid', { start: 0, end: 3 }),
+            frameRate: 20,
+            repeat: -1,
+        });
+
+        this.anims.create({
+            key: 'playerRight',
             frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
             frameRate: 10,
             repeat: -1,
         });
+        
+        this.createEnemies();
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -72,6 +80,8 @@ export const Level1 = new Phaser['Class']({
         this.physics.add.collider(this.player, this.platforms);
         this.physics.add.collider(this.player, this.elevators, this.setBottomBlocked, null, this);
         this.physics.add.collider(this.stars, this.platforms);
+        this.physics.add.collider(this.enemies, this.platforms);
+        this.physics.add.collider(this.enemies, this.enemyWalls, this.setEnemyDirection);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         // this.physics.add.overlap(this.player, this.elevators, this.setBottomBlocked, null, this);
@@ -83,15 +93,15 @@ export const Level1 = new Phaser['Class']({
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
 
-            this.player.anims.play('left', true);
+            this.player.anims.play('playerLeft', true);
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(160);
 
-            this.player.anims.play('right', true);
+            this.player.anims.play('playerRight', true);
         } else {
             this.player.setVelocityX(0);
 
-            this.player.anims.play('turn');
+            this.player.anims.play('playerTurn');
         }
     },
 
@@ -100,7 +110,6 @@ export const Level1 = new Phaser['Class']({
             if (key.key === 'ArrowUp' && this.player.body.blocked.down) {
                 this.player.setVelocityY(-470);
             }
-            console.log(key);
         });
     },
 
@@ -137,8 +146,28 @@ export const Level1 = new Phaser['Class']({
         });
     },
 
+    createEnemies() {
+        this.enemies = this.physics.add.group();
+        this.enemies.create(470, 970, 'droid');
+        this.enemies.create(520, 970, 'droid');
+
+        this.enemies.children.iterate((enemy) => {
+            enemy.body.velocity.x = -100;
+            enemy.anims.play('droidLeft', true);
+        });
+    },
+
+    setEnemyDirection(enemy) {
+        if (enemy.body.touching.right || enemy.body.blocked.right) {
+            enemy.setVelocityX(-100);
+        } else if (enemy.body.touching.left || enemy.body.blocked.left) {
+            enemy.setVelocityX(100);
+        }
+    },
+
     createPlatforms() {
         this.platforms = this.physics.add.staticGroup();
+        this.enemyWalls = this.physics.add.staticGroup();
         for (let index = 200; index < 2400; index += 400) {
             this.platforms.create(index, 1185, 'ground');
         }
@@ -151,6 +180,29 @@ export const Level1 = new Phaser['Class']({
         this.platforms.create(200, 500, 'ground');
         this.platforms.create(50, 250, 'ground');
         this.platforms.create(750, 220, 'ground');
+
+        const offsetx = 200 + 16;
+        const offsety = - 32;
+
+        this.enemyWalls.create(600 - offsetx, 400 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(600 - offsetx, 1025 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1200 - offsetx, 900 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1800 - offsetx, 800 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1200 - offsetx, 700 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(600 - offsetx, 600 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(200 - offsetx, 500 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(50 - offsetx, 250 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(750 - offsetx, 220 + offsety, 'transparent').visible = false;
+
+        this.enemyWalls.create(600 + offsetx, 400 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(600 + offsetx, 1025 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1200 + offsetx, 900 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1800 + offsetx, 800 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(1200 + offsetx, 700 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(600 + offsetx, 600 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(200 + offsetx, 500 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(50 + offsetx, 250 + offsety, 'transparent').visible = false;
+        this.enemyWalls.create(750 + offsetx, 220 + offsety, 'transparent').visible = false;
 
         this.elevators = this.physics.add.group({ allowGravity: false });
 
