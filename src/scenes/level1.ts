@@ -57,7 +57,7 @@ export const Level1 = new Phaser['Class']({
             frameRate: 10,
             repeat: -1,
         });
-        
+
         this.createEnemies();
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -82,9 +82,9 @@ export const Level1 = new Phaser['Class']({
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.collider(this.enemies, this.platforms);
         this.physics.add.collider(this.enemies, this.enemyWalls, this.setEnemyDirection);
+        this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, null, this);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
-        // this.physics.add.overlap(this.player, this.elevators, this.setBottomBlocked, null, this);
         this.inputKeyboard();
     },
 
@@ -126,7 +126,6 @@ export const Level1 = new Phaser['Class']({
     setBottomBlocked(player) {
         if (player.body.touching.down) {
             this.player.body.blocked.down = true;
-            // console.log(this.player);
         }
     },
 
@@ -154,6 +153,7 @@ export const Level1 = new Phaser['Class']({
         this.enemies.children.iterate((enemy) => {
             enemy.body.velocity.x = -100;
             enemy.anims.play('droidLeft', true);
+            enemy.setCollideWorldBounds(true);
         });
     },
 
@@ -163,6 +163,15 @@ export const Level1 = new Phaser['Class']({
         } else if (enemy.body.touching.left || enemy.body.blocked.left) {
             enemy.setVelocityX(100);
         }
+    },
+
+    hitAnEnemy(player, enemy) {
+            if (enemy.body.touching.up && player.body.touching.down) {
+                this.player.setVelocityY(-470);
+                enemy.disableBody(true, true);
+            } else {
+                this.scene.start('level1');
+            }
     },
 
     createPlatforms() {
