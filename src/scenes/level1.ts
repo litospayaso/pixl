@@ -76,6 +76,7 @@ export const Level1 = new Phaser.Class({
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         // this.physics.add.overlap(this.player, this.elevators, this.setBottomBlocked, null, this);
+        this.inputKeyboard();
     },
 
     update() {
@@ -93,11 +94,15 @@ export const Level1 = new Phaser.Class({
 
             this.player.anims.play('turn');
         }
+    },
 
-        // if (this.cursors.up.isDown && this.player.body.touching.down) {
-        if (this.cursors.up.isDown && this.player.body.blocked.down) {
-            this.player.setVelocityY(-470);
-        }
+    inputKeyboard() {
+        this.input.keyboard.on('keydown', (key) => {
+            if (key.key === 'ArrowUp' && this.player.body.blocked.down) {
+                this.player.setVelocityY(-470);
+            }
+            console.log(key);
+        });
     },
 
     collectStar(pl, star) {
