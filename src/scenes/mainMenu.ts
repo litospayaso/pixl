@@ -1,6 +1,4 @@
-declare const Phaser;
-
-export const MainMenu = new Phaser.Class({
+export const MainMenu = new Phaser['Class']({
     Extends: Phaser.Scene,
 
     initialize() {

@@ -3,8 +3,6 @@ import { Level1 } from '../scenes/level1';
 import { MainMenu } from '../scenes/mainMenu';
 import { Preloader } from './preloader';
 
-declare const Phaser;
-
 export function Config() {
     const config = {
         type: Phaser.AUTO,

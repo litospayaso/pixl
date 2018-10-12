@@ -1,6 +1,4 @@
-declare const Phaser;
-
-export const GameOver = new Phaser.Class({
+export const GameOver = new Phaser['Class']({
 
     Extends: Phaser.Scene,
 

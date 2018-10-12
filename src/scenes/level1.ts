@@ -1,6 +1,4 @@
-declare const Phaser;
-
-export const Level1 = new Phaser.Class({
+export const Level1 = new Phaser['Class']({
 
     Extends: Phaser.Scene,
 
@@ -16,6 +14,7 @@ export const Level1 = new Phaser.Class({
     initialize() {
         Phaser.Scene.call(this, { key: 'level1' });
         window['GAME'] = this;
+
     },
 
     preload() {

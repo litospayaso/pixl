@@ -1,6 +1,4 @@
-declare const Phaser;
-
-export const Preloader = new Phaser.Class({
+export const Preloader = new Phaser['Class']({
 
     Extends: Phaser.Scene,
 
