@@ -125,8 +125,8 @@ export class Level1 extends Phaser.Scene {
     }
 
     setBottomBlocked(player, platform) {
-        player.body.velocity.y = 100;
         if (player.body.touching.down) {
+            player.body.velocity.y = Math.abs(platform.body.speed);
             this.player.body.blocked.down = true;
         }
     }
