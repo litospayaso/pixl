@@ -6,10 +6,10 @@ export class Level1 extends Phaser.Scene {
     stars: Phaser.GameObjects.Group;
     scoreText: Phaser.GameObjects.Text;
     positionText: Phaser.GameObjects.Text;
-    score = 0;
     elevators: Phaser.GameObjects.Group;
     enemies: Phaser.GameObjects.Group;
     enemyWalls: Phaser.Physics.Arcade.StaticGroup;
+    score = 0;
 
     constructor() {
         super({
@@ -124,7 +124,8 @@ export class Level1 extends Phaser.Scene {
         }
     }
 
-    setBottomBlocked(player) {
+    setBottomBlocked(player, platform) {
+        player.body.velocity.y = 100;
         if (player.body.touching.down) {
             this.player.body.blocked.down = true;
         }
