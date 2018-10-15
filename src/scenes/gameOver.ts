@@ -1,11 +1,10 @@
-export const GameOver = new Phaser['Class']({
+export class GameOver extends Phaser.Scene {
 
-    Extends: Phaser.Scene,
-
-    initialize() {
-        Phaser.Scene.call(this, { key: 'gameover' });
-        window['OVER'] = this;
-    },
+    constructor() {
+        super({
+            key: 'gameover',
+        });
+    }
 
     create() {
         console.log('%c GameOver ', 'background: green; color: white; display: block;');
@@ -17,6 +16,6 @@ export const GameOver = new Phaser['Class']({
         this.input.once('pointerup', (event) => {
             this.scene.start('mainmenu');
         }, this);
-    },
+    }
 
-});
+}

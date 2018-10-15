@@ -1,10 +1,10 @@
-export const Preloader = new Phaser['Class']({
+export class Preloader extends Phaser.Scene {
 
-    Extends: Phaser.Scene,
-
-    initialize() {
-        Phaser.Scene.call(this, { key: 'preloader' });
-    },
+    constructor() {
+        super({
+            key: 'preloader',
+        });
+    }
 
     preload() {
         this.load.image('buttonBG', 'assets/sprites/button-bg.png');
@@ -21,12 +21,12 @@ export const Preloader = new Phaser['Class']({
         this.load.image('transparent', 'assets/sprites/transparent.png');
         this.load.spritesheet('dude', 'assets/sprites/dude.png', { frameWidth: 32, frameHeight: 48 });
         this.load.spritesheet('droid', 'assets/sprites/droid.png', { frameWidth: 32, frameHeight: 32 });
-    },
+    }
 
     create() {
         console.log('%c Preloader ', 'background: green; color: white; display: block;');
 
         this.scene.start('level1');
-    },
+    }
 
-});
+}

@@ -1,24 +1,25 @@
-export const Level1 = new Phaser['Class']({
+export class Level1 extends Phaser.Scene {
 
-    Extends: Phaser.Scene,
+    platforms: Phaser.GameObjects.Group;
+    cursors: Phaser.Input.Keyboard.CursorKeys;
+    player: Phaser.Physics.Arcade.Sprite;
+    stars: Phaser.GameObjects.Group;
+    scoreText: Phaser.GameObjects.Text;
+    positionText: Phaser.GameObjects.Text;
+    score = 0;
+    elevators: Phaser.GameObjects.Group;
+    enemies: Phaser.GameObjects.Group;
+    enemyWalls: Phaser.Physics.Arcade.StaticGroup;
 
-    platform: undefined,
-    cursors: undefined,
-    player: undefined,
-    stars: undefined,
-    scoreText: undefined,
-    positionText: undefined,
-    score: 0,
-    elevators: undefined,
-    enemies: undefined,
-    enemyWalls: undefined,
+    constructor() {
+        super({
+            key: 'level1',
+        });
+    }
 
-    initialize() {
-        Phaser.Scene.call(this, { key: 'level1' });
-        window['GAME'] = this;
-    },
+    // initialize() {}
 
-    // preload() {},
+    // preload() {}
 
     create() {
         this.score = 0;
@@ -72,7 +73,7 @@ export const Level1 = new Phaser['Class']({
 
             // child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
 
-        });
+        }, this);
 
         this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
         this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
@@ -86,7 +87,7 @@ export const Level1 = new Phaser['Class']({
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         this.inputKeyboard();
-    },
+    }
 
     update() {
         this.positionText.setText(`x: ${this.player.x};y: ${this.player.y};`);
@@ -103,7 +104,7 @@ export const Level1 = new Phaser['Class']({
 
             this.player.anims.play('playerTurn');
         }
-    },
+    }
 
     inputKeyboard() {
         this.input.keyboard.on('keydown', (key) => {
@@ -111,7 +112,7 @@ export const Level1 = new Phaser['Class']({
                 this.player.setVelocityY(-470);
             }
         });
-    },
+    }
 
     collectStar(pl, star) {
         star.disableBody(true, true);
@@ -121,29 +122,31 @@ export const Level1 = new Phaser['Class']({
         if (this.score === 120) {
             this.scene.start('gameover');
         }
-    },
+    }
 
     setBottomBlocked(player) {
         if (player.body.touching.down) {
             this.player.body.blocked.down = true;
         }
-    },
+    }
 
     createBounds() {
         this.cameras.main.setBounds(0, 0, 2400, 1200);
         this.physics.world.setBounds(0, 0, 2400, 1200);
 
-        this.add.group({
+        this.physics.add.group({
             key: 'sky',
             repeat: 6,
             setXY: { x: 400, y: 300, stepX: 400 },
+            allowGravity: false,
         });
-        this.add.group({
+        this.physics.add.group({
             key: 'sky',
             repeat: 6,
             setXY: { x: 400, y: 900, stepX: 400 },
+            allowGravity: false,
         });
-    },
+    }
 
     createEnemies() {
         this.enemies = this.physics.add.group();
@@ -154,8 +157,8 @@ export const Level1 = new Phaser['Class']({
             enemy.body.velocity.x = -100;
             enemy.anims.play('droidLeft', true);
             enemy.setCollideWorldBounds(true);
-        });
-    },
+        }, this);
+    }
 
     setEnemyDirection(enemy) {
         if (enemy.body.touching.right || enemy.body.blocked.right) {
@@ -163,7 +166,7 @@ export const Level1 = new Phaser['Class']({
         } else if (enemy.body.touching.left || enemy.body.blocked.left) {
             enemy.setVelocityX(100);
         }
-    },
+    }
 
     hitAnEnemy(player, enemy) {
             if (enemy.body.touching.up && player.body.touching.down) {
@@ -172,7 +175,7 @@ export const Level1 = new Phaser['Class']({
             } else {
                 this.scene.start('level1');
             }
-    },
+    }
 
     createPlatforms() {
         this.platforms = this.physics.add.staticGroup();
@@ -225,7 +228,7 @@ export const Level1 = new Phaser['Class']({
                     child.body.velocity.y *= -1;
                 },
             });
-        });
-    },
+        }, this);
+    }
 
-});
+}

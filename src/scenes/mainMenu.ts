@@ -1,10 +1,10 @@
-export const MainMenu = new Phaser['Class']({
-    Extends: Phaser.Scene,
+export class MainMenu extends Phaser.Scene {
 
-    initialize() {
-            Phaser.Scene.call(this, { key: 'mainmenu' });
-            window['MENU'] = this;
-        },
+    constructor() {
+        super({
+            key: 'mainmenu',
+        });
+    }
 
     create() {
         console.log('%c MainMenu ', 'background: green; color: white; display: block;');
@@ -21,5 +21,6 @@ export const MainMenu = new Phaser['Class']({
             this.scene.start('level1');
 
         }, this);
-    },
-});
+    }
+
+}
