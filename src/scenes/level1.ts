@@ -83,8 +83,8 @@ export class Level1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.elevators, this.setBottomBlocked, null, this);
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.collider(this.enemies, this.platforms);
-        this.physics.add.collider(this.enemies, this.enemyWalls, this.setEnemyDirection);
-        this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, null, this);
+        this.physics.add.collider(this.enemies, this.enemyWalls, this.changeSpriteDirection);
+        this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, () => !this.blockPlayer, this);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         this.inputKeyboard();
@@ -167,7 +167,7 @@ export class Level1 extends Phaser.Scene {
         }, this);
     }
 
-    setEnemyDirection(enemy) {
+    changeSpriteDirection(enemy) {
         if (enemy.body.touching.right || enemy.body.blocked.right) {
             enemy.setVelocityX(-100);
         } else if (enemy.body.touching.left || enemy.body.blocked.left) {
@@ -190,8 +190,8 @@ export class Level1 extends Phaser.Scene {
             enemy.disableBody(true, true);
         } else {
             this.blockPlayer = true;
-            this.setEnemyDirection(enemy);
-            this.setEnemyDirection(player);
+            this.changeSpriteDirection(enemy);
+            this.changeSpriteDirection(player);
             player.setVelocityY(-300);
             this.flashSprite(player);
             setTimeout(() => this.blockPlayer = false, 1000);
