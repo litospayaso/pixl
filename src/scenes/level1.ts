@@ -1,15 +1,16 @@
 export class Level1 extends Phaser.Scene {
 
-    platforms: Phaser.GameObjects.Group;
-    cursors: Phaser.Input.Keyboard.CursorKeys;
-    player: Phaser.Physics.Arcade.Sprite;
-    stars: Phaser.GameObjects.Group;
-    scoreText: Phaser.GameObjects.Text;
-    positionText: Phaser.GameObjects.Text;
-    elevators: Phaser.GameObjects.Group;
-    enemies: Phaser.GameObjects.Group;
-    enemyWalls: Phaser.Physics.Arcade.StaticGroup;
-    score = 0;
+    private platforms: Phaser.GameObjects.Group;
+    private cursors: Phaser.Input.Keyboard.CursorKeys;
+    private player: Phaser.Physics.Arcade.Sprite;
+    private stars: Phaser.GameObjects.Group;
+    private scoreText: Phaser.GameObjects.Text;
+    private positionText: Phaser.GameObjects.Text;
+    private elevators: Phaser.GameObjects.Group;
+    private enemies: Phaser.GameObjects.Group;
+    private enemyWalls: Phaser.Physics.Arcade.StaticGroup;
+    private blockPlayer = false;
+    private score = 0;
 
     constructor() {
         super({
@@ -91,18 +92,23 @@ export class Level1 extends Phaser.Scene {
 
     update() {
         this.positionText.setText(`x: ${this.player.x};y: ${this.player.y};`);
-        if (this.cursors.left.isDown) {
-            this.player.setVelocityX(-160);
+        this.handleKeyboardDownInput();
+    }
 
-            this.player.anims.play('playerLeft', true);
-        } else if (this.cursors.right.isDown) {
-            this.player.setVelocityX(160);
+    handleKeyboardDownInput() {
+        if (!this.blockPlayer) {
+            if (this.cursors.left.isDown) {
+                this.player.setVelocityX(-160);
+                this.player.anims.play('playerLeft', true);
+            } else if (this.cursors.right.isDown) {
+                this.player.setVelocityX(160);
 
-            this.player.anims.play('playerRight', true);
-        } else {
-            this.player.setVelocityX(0);
+                this.player.anims.play('playerRight', true);
+            } else {
+                this.player.setVelocityX(0);
 
-            this.player.anims.play('playerTurn');
+                this.player.anims.play('playerTurn');
+            }
         }
     }
 
@@ -169,13 +175,28 @@ export class Level1 extends Phaser.Scene {
         }
     }
 
+    flashSprite(sprite) {
+        let alfa = 0;
+        const interval = setInterval(() => {
+            sprite.setAlpha(alfa, alfa, alfa, alfa);
+            alfa = alfa ? 0 : 1;
+        }, 100);
+        setTimeout(() => clearInterval(interval), 1000);
+    }
+
     hitAnEnemy(player, enemy) {
-            if (enemy.body.touching.up && player.body.touching.down) {
-                this.player.setVelocityY(-470);
-                enemy.disableBody(true, true);
-            } else {
-                this.scene.start('level1');
-            }
+        if (enemy.body.touching.up && player.body.touching.down) {
+            this.player.setVelocityY(-470);
+            enemy.disableBody(true, true);
+        } else {
+            this.blockPlayer = true;
+            this.setEnemyDirection(enemy);
+            this.setEnemyDirection(player);
+            player.setVelocityY(-300);
+            this.flashSprite(player);
+            setTimeout(() => this.blockPlayer = false, 1000);
+            // this.scene.start('level1');
+        }
     }
 
     createPlatforms() {
