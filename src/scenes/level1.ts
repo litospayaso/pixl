@@ -10,6 +10,7 @@ export class Level1 extends Phaser.Scene {
     private enemies: Phaser.GameObjects.Group;
     private enemyWalls: Phaser.Physics.Arcade.StaticGroup;
     private blockPlayer = false;
+    private playerHitted = false;
     private score = 0;
 
     constructor() {
@@ -84,7 +85,7 @@ export class Level1 extends Phaser.Scene {
         this.physics.add.collider(this.stars, this.platforms);
         this.physics.add.collider(this.enemies, this.platforms);
         this.physics.add.collider(this.enemies, this.enemyWalls, this.changeSpriteDirection);
-        this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, () => !this.blockPlayer, this);
+        this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, () => !this.playerHitted, this);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         this.inputKeyboard();
@@ -181,7 +182,11 @@ export class Level1 extends Phaser.Scene {
             sprite.setAlpha(alfa, alfa, alfa, alfa);
             alfa = alfa ? 0 : 1;
         }, 100);
-        setTimeout(() => clearInterval(interval), 1000);
+        setTimeout(() => {
+            clearInterval(interval);
+            this.playerHitted = false;
+            sprite.setAlpha(1, 1, 1, 1);
+        }, 2500);
     }
 
     hitAnEnemy(player, enemy) {
@@ -189,7 +194,7 @@ export class Level1 extends Phaser.Scene {
             this.player.setVelocityY(-470);
             enemy.disableBody(true, true);
         } else {
-            this.blockPlayer = true;
+            this.blockPlayer = this.playerHitted = true;
             this.changeSpriteDirection(enemy);
             this.changeSpriteDirection(player);
             player.setVelocityY(-300);
