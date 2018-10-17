@@ -31,6 +31,15 @@ export class Level1 extends Phaser.Scene {
 
         this.player = this.physics.add.sprite(100, 1100, 'dude');
 
+        this.add.sprite(770, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
+            if (this.sys.isActive()) {
+                this.scene.pause();
+            } else {
+                this.scene.resume();
+            }
+            console.log(this.scene);
+        });
+
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
 
         this.player.setCollideWorldBounds(true);
@@ -61,7 +70,6 @@ export class Level1 extends Phaser.Scene {
             frameRate: 10,
             repeat: -1,
         });
-
         this.createEnemies();
 
         this.cursors = this.input.keyboard.createCursorKeys();
