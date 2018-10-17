@@ -8,6 +8,7 @@ export class Level1 extends Phaser.Scene {
     private positionText: Phaser.GameObjects.Text;
     private elevators: Phaser.GameObjects.Group;
     private enemies: Phaser.GameObjects.Group;
+    private fireballs: Phaser.GameObjects.Group;
     private enemyWalls: Phaser.Physics.Arcade.StaticGroup;
     private blockPlayer = false;
     private playerHitted = false;
@@ -86,6 +87,7 @@ export class Level1 extends Phaser.Scene {
         this.physics.add.collider(this.enemies, this.platforms);
         this.physics.add.collider(this.enemies, this.enemyWalls, this.changeSpriteDirection);
         this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, () => !this.playerHitted, this);
+        this.physics.add.collider(this.player, this.fireballs, this.hitAFireball, () => !this.playerHitted, this);
 
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         this.inputKeyboard();
@@ -94,6 +96,17 @@ export class Level1 extends Phaser.Scene {
     update() {
         this.positionText.setText(`x: ${this.player.x};y: ${this.player.y};`);
         this.handleKeyboardDownInput();
+        this.enemyShotFireball();
+    }
+
+    enemyShotFireball() {
+        this.enemies.children.iterate( (enemy) => {
+            if (Math.round(enemy.y) === Math.round(this.player.y)) {
+                console.log('Fire!!');
+                const ball = this.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);
+                ball.setVelocityX(enemy.body.velocity.x * 2);
+            }
+        }, this);
     }
 
     handleKeyboardDownInput() {
@@ -158,6 +171,7 @@ export class Level1 extends Phaser.Scene {
 
     createEnemies() {
         this.enemies = this.physics.add.group();
+        this.fireballs = this.physics.add.group({ allowGravity: false });
         this.enemies.create(470, 970, 'droid');
         this.enemies.create(520, 970, 'droid');
 
@@ -179,14 +193,28 @@ export class Level1 extends Phaser.Scene {
     flashSprite(sprite) {
         let alfa = 0;
         const interval = setInterval(() => {
-            sprite.setAlpha(alfa, alfa, alfa, alfa);
+            sprite.setAlpha(alfa);
             alfa = alfa ? 0 : 1;
         }, 100);
         setTimeout(() => {
             clearInterval(interval);
             this.playerHitted = false;
-            sprite.setAlpha(1, 1, 1, 1);
+            sprite.setAlpha(1);
         }, 2500);
+    }
+
+    hitAFireball(player, enemy) {
+        enemy.disableBody(true, true);
+        if (enemy.body.touching.up && player.body.touching.down) {
+            this.player.setVelocityY(-470);
+        } else {
+            this.blockPlayer = this.playerHitted = true;
+            this.changeSpriteDirection(player);
+            player.setVelocityY(-300);
+            this.flashSprite(player);
+            setTimeout(() => this.blockPlayer = false, 1000);
+            // this.scene.start('level1');
+        }
     }
 
     hitAnEnemy(player, enemy) {
