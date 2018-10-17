@@ -89,6 +89,9 @@ export class Level1 extends Phaser.Scene {
         this.physics.add.collider(this.player, this.enemies, this.hitAnEnemy, () => !this.playerHitted, this);
         this.physics.add.collider(this.player, this.fireballs, this.hitAFireball, () => !this.playerHitted, this);
 
+        this.physics.world.setBoundsCollision(true, true, true, false);
+        this.physics.world.on('worldbounds', (body) => body.gameObject.destroy(), this);
+
         this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
         this.inputKeyboard();
     }
@@ -102,9 +105,11 @@ export class Level1 extends Phaser.Scene {
     enemyShotFireball() {
         this.enemies.children.iterate( (enemy) => {
             if (Math.round(enemy.y) === Math.round(this.player.y)) {
-                console.log('Fire!!');
                 const ball = this.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);
                 ball.setVelocityX(enemy.body.velocity.x * 2);
+                ball.setCollideWorldBounds(true);
+                ball.body.onWorldBounds = true;
+                ball.remove = ball.destroy;
             }
         }, this);
     }
