@@ -14,8 +14,7 @@ export class DialogsModal extends Phaser.Scene {
     private windowColor = 0x303030;
     private windowHeight = 150;
     private padding = 32;
-    private closeBtnColor = 'darkgoldenrod';
-    private dialogSpeed = 3;
+    private dialogSpeed = 5;
     private text: Phaser.GameObjects.Text;
     private graphics: Phaser.GameObjects.Graphics;
     private timedEvent: Phaser.Time.TimerEvent;
@@ -70,7 +69,7 @@ export class DialogsModal extends Phaser.Scene {
         if (this.text) { this.text.destroy(); }
 
         const x = this.padding + 10;
-        const y = this._getGameHeight() - this.windowHeight - this.padding + 10;
+        const y = this.padding + 10;
 
         this.text = this.make.text({
             x,
@@ -106,7 +105,7 @@ export class DialogsModal extends Phaser.Scene {
     // Calculates where to place the dialog window based on the game size
     _calculateWindowDimensions(width: number, height: number): Idimensions {
         const x = this.padding;
-        const y = height - this.windowHeight - this.padding;
+        const y = this.padding;
         const rectWidth = width - (this.padding * 2);
         const rectHeight = this.windowHeight;
         return {
