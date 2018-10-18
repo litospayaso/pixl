@@ -32,7 +32,7 @@ export class Level1 extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 1100, 'dude');
 
         this.add.sprite(770, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-            this.scene.launch('dialogsModal', {text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'});
+            this.scene.launch('dialogsModal', {text: 'hola'});
             this.scene.pause();
         });
 
@@ -108,12 +108,16 @@ export class Level1 extends Phaser.Scene {
 
     enemyShotFireball() {
         this.enemies.children.iterate( (enemy) => {
-            if (Math.round(enemy.y) === Math.round(this.player.y)) {
-                const ball = this.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);
-                ball.setVelocityX(enemy.body.velocity.x * 2);
-                ball.setCollideWorldBounds(true);
-                ball.body.onWorldBounds = true;
-                ball.remove = ball.destroy;
+            if (Math.round(enemy.y + (enemy.height / 2)) === Math.round(this.player.y) + (this.player.height / 2)) {
+                if (!enemy.hasShotted) {
+                    enemy.hasShotted = true;
+                    const ball = this.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);
+                    ball.setVelocityX(enemy.body.velocity.x * 2);
+                    ball.setCollideWorldBounds(true);
+                    ball.body.onWorldBounds = true;
+                    ball.remove = ball.destroy;
+                    setTimeout(() => enemy.hasShotted = false, 1500);
+                }
             }
         }, this);
     }
@@ -228,7 +232,7 @@ export class Level1 extends Phaser.Scene {
 
     hitAnEnemy(player, enemy) {
         if (enemy.body.touching.up && player.body.touching.down) {
-            this.player.setVelocityY(-470);
+            this.player.setVelocityY(this.cursors.up.isDown ? -470 : -220);
             enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
