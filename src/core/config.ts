@@ -1,6 +1,6 @@
 import { DialogsModal } from '../scenes/dialogsModal';
 import { GameOver } from '../scenes/gameOver';
-import { Level1 } from '../scenes/level1';
+import { Level1 } from '../scenes/level1/level1';
 import { MainMenu } from '../scenes/mainMenu';
 import { Preloader } from './preloader';
 

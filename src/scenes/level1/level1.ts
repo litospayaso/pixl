@@ -1,3 +1,5 @@
+import { createLevel } from './createLevel';
+
 export class Level1 extends Phaser.Scene {
 
     private platforms: Phaser.GameObjects.Group;
@@ -147,7 +149,7 @@ export class Level1 extends Phaser.Scene {
         });
     }
 
-    collectStar(pl, star) {
+    collectStar(pl: Phaser.Physics.Arcade.Sprite, star: Phaser.Physics.Arcade.Sprite) {
         star.disableBody(true, true);
 
         this.score += 10;
@@ -157,9 +159,9 @@ export class Level1 extends Phaser.Scene {
         }
     }
 
-    setBottomBlocked(player, platform) {
+    setBottomBlocked(player: Phaser.Physics.Arcade.Sprite, platform: Phaser.Physics.Arcade.Sprite) {
         if (player.body.touching.down) {
-            player.body.velocity.y = Math.abs(platform.body.speed);
+            player.body.velocity.y = Math.abs(platform.body['speed']);
             this.player.body.blocked.down = true;
         }
     }
@@ -188,22 +190,22 @@ export class Level1 extends Phaser.Scene {
         this.enemies.create(470, 970, 'droid');
         this.enemies.create(520, 970, 'droid');
 
-        this.enemies.children.iterate((enemy) => {
+        this.enemies.children.iterate((enemy: Phaser.Physics.Arcade.Sprite) => {
             enemy.body.velocity.x = -100;
             enemy.anims.play('droidLeft', true);
             enemy.setCollideWorldBounds(true);
         }, this);
     }
 
-    changeSpriteDirection(enemy) {
-        if (enemy.body.touching.right || enemy.body.blocked.right) {
-            enemy.setVelocityX(-100);
-        } else if (enemy.body.touching.left || enemy.body.blocked.left) {
-            enemy.setVelocityX(100);
+    changeSpriteDirection(sprite: Phaser.Physics.Arcade.Sprite) {
+        if (sprite.body.touching.right || sprite.body.blocked.right) {
+            sprite.setVelocityX(-100);
+        } else if (sprite.body.touching.left || sprite.body.blocked.left) {
+            sprite.setVelocityX(100);
         }
     }
 
-    flashSprite(sprite) {
+    flashSprite(sprite: Phaser.Physics.Arcade.Sprite) {
         let alfa = 0;
         const interval = setInterval(() => {
             sprite.setAlpha(alfa);
@@ -216,7 +218,7 @@ export class Level1 extends Phaser.Scene {
         }, 2500);
     }
 
-    hitAFireball(player, enemy) {
+    hitAFireball(player: Phaser.Physics.Arcade.Sprite, enemy: Phaser.Physics.Arcade.Sprite) {
         enemy.disableBody(true, true);
         if (enemy.body.touching.up && player.body.touching.down) {
             this.player.setVelocityY(-470);
@@ -230,7 +232,7 @@ export class Level1 extends Phaser.Scene {
         }
     }
 
-    hitAnEnemy(player, enemy) {
+    hitAnEnemy(player: Phaser.Physics.Arcade.Sprite, enemy: Phaser.Physics.Arcade.Sprite) {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.player.setVelocityY(this.cursors.up.isDown ? -470 : -220);
             enemy.destroy();
@@ -249,55 +251,8 @@ export class Level1 extends Phaser.Scene {
     createPlatforms() {
         this.platforms = this.physics.add.staticGroup();
         this.enemyWalls = this.physics.add.staticGroup();
-        for (let index = 200; index < 2400; index += 400) {
-            this.platforms.create(index, 1185, 'ground');
-        }
-        this.platforms.create(600, 400, 'ground');
-        this.platforms.create(600, 1025, 'ground');
-        this.platforms.create(1200, 900, 'ground');
-        this.platforms.create(1800, 800, 'ground');
-        this.platforms.create(1200, 700, 'ground');
-        this.platforms.create(600, 600, 'ground');
-        this.platforms.create(200, 500, 'ground');
-        this.platforms.create(50, 250, 'ground');
-        this.platforms.create(750, 220, 'ground');
-
-        const offsetx = 200 + 16;
-        const offsety = - 32;
-
-        this.enemyWalls.create(600 - offsetx, 400 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(600 - offsetx, 1025 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1200 - offsetx, 900 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1800 - offsetx, 800 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1200 - offsetx, 700 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(600 - offsetx, 600 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(200 - offsetx, 500 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(50 - offsetx, 250 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(750 - offsetx, 220 + offsety, 'transparent').visible = false;
-
-        this.enemyWalls.create(600 + offsetx, 400 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(600 + offsetx, 1025 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1200 + offsetx, 900 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1800 + offsetx, 800 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(1200 + offsetx, 700 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(600 + offsetx, 600 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(200 + offsetx, 500 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(50 + offsetx, 250 + offsety, 'transparent').visible = false;
-        this.enemyWalls.create(750 + offsetx, 220 + offsety, 'transparent').visible = false;
-
         this.elevators = this.physics.add.group({ allowGravity: false });
-
-        this.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100);
-
-        this.elevators.children.iterate((child) => {
-            this.time.addEvent({
-                delay: 4000,
-                loop: true,
-                callback() {
-                    child.body.velocity.y *= -1;
-                },
-            });
-        }, this);
+        createLevel(this.platforms, this.enemyWalls, this.elevators, this);
     }
 
 }
