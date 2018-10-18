@@ -32,12 +32,8 @@ export class Level1 extends Phaser.Scene {
         this.player = this.physics.add.sprite(100, 1100, 'dude');
 
         this.add.sprite(770, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-            if (this.sys.isActive()) {
-                this.scene.pause();
-            } else {
-                this.scene.resume();
-            }
-            console.log(this.scene);
+            this.scene.launch('dialogsModal', {text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'});
+            this.scene.pause();
         });
 
         this.cameras.main.startFollow(this.player, true, 0.09, 0.09);
@@ -233,7 +229,8 @@ export class Level1 extends Phaser.Scene {
     hitAnEnemy(player, enemy) {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.player.setVelocityY(-470);
-            enemy.disableBody(true, true);
+            enemy.destroy();
+            // enemy.disableBody(true, true);
         } else {
             this.blockPlayer = this.playerHitted = true;
             this.changeSpriteDirection(enemy);

@@ -1,3 +1,4 @@
+import { DialogsModal } from '../scenes/dialogsModal';
 import { GameOver } from '../scenes/gameOver';
 import { Level1 } from '../scenes/level1';
 import { MainMenu } from '../scenes/mainMenu';
@@ -17,7 +18,7 @@ export class Config extends Phaser.Game {
                     debug: false,
                 },
             },
-            scene: [Preloader, MainMenu, Level1, GameOver],
+            scene: [Preloader, MainMenu, Level1, GameOver, DialogsModal],
         });
     }
 }
