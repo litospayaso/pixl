@@ -1,9 +1,11 @@
 import { animateSprites } from '../../core/animateSprites';
 import { LevelProperties } from '../../core/LevelProperties';
+import { PlayerObject } from '../../core/PlayerObject';
 import { configColliders } from './configColliders';
 import { configEnemies } from './configEnemies';
 import { configItems } from './configItems';
 import { configPlatforms } from './configPlatforms';
+import { configPlayer } from './configPlayer';
 
 export class Level1 extends Phaser.Scene {
 
@@ -17,6 +19,7 @@ export class Level1 extends Phaser.Scene {
     private configEnemies = configEnemies.bind(this);
     private configItems = configItems.bind(this);
     private configPlatforms = configPlatforms.bind(this);
+    private configPlayer = configPlayer.bind(this);
 
     constructor() {
         super({
@@ -34,7 +37,7 @@ export class Level1 extends Phaser.Scene {
         this.animateSprites();
         this.configPlatforms(this.levelProperties);
         this.configEnemies(this.levelProperties);
-        this.levelProperties.player = this.physics.add.sprite(100, 1100, 'dude');
+        this.configPlayer(this.levelProperties);
         this.configItems(this.levelProperties);
         this.configColliders(this.levelProperties);
     }
@@ -79,7 +82,7 @@ export class Level1 extends Phaser.Scene {
     }
 
     handleKeyboardDownInput() {
-        if (!this.levelProperties.blockPlayer) {
+        if (!this.levelProperties.player.blockPlayer) {
             if (this.levelProperties.cursors.left.isDown) {
                 this.levelProperties.player.setVelocityX(-160);
                 this.levelProperties.player.anims.play('playerLeft', true);
@@ -136,37 +139,37 @@ export class Level1 extends Phaser.Scene {
         }, 100);
         setTimeout(() => {
             clearInterval(interval);
-            this.levelProperties.playerHitted = false;
+            this.levelProperties.player.playerHitted = false;
             sprite.setAlpha(1);
         }, 2500);
     }
 
-    hitAFireball(player: Phaser.Physics.Arcade.Sprite, enemy: Phaser.Physics.Arcade.Sprite) {
+    hitAFireball(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         enemy.disableBody(true, true);
         if (enemy.body.touching.up && player.body.touching.down) {
-            this.levelProperties.player.setVelocityY(-470);
+            this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
-            this.levelProperties.blockPlayer = this.levelProperties.playerHitted = true;
+            player.blockPlayer = player.playerHitted = true;
             this.changeSpriteDirection(player);
             player.setVelocityY(-300);
             this.flashSprite(player);
-            setTimeout(() => this.levelProperties.blockPlayer = false, 1000);
+            setTimeout(() => player.blockPlayer = false, 1000);
             // this.scene.start('level1');
         }
     }
 
-    hitAnEnemy(player: Phaser.Physics.Arcade.Sprite, enemy: Phaser.Physics.Arcade.Sprite) {
+    hitAnEnemy(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         if (enemy.body.touching.up && player.body.touching.down) {
-            this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
+            player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
             enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
-            this.levelProperties.blockPlayer = this.levelProperties.playerHitted = true;
+            player.blockPlayer = player.playerHitted = true;
             this.changeSpriteDirection(enemy);
             this.changeSpriteDirection(player);
             player.setVelocityY(-300);
             this.flashSprite(player);
-            setTimeout(() => this.levelProperties.blockPlayer = false, 1000);
+            setTimeout(() => player.blockPlayer = false, 1000);
             // this.scene.start('level1');
         }
     }

@@ -1,15 +1,15 @@
+import { PlayerObject } from './PlayerObject';
+
 export class LevelProperties {
     scene: Phaser.Scene;
+    player: PlayerObject;
     platforms: Phaser.GameObjects.Group;
     cursors: Phaser.Input.Keyboard.CursorKeys;
     elevators: Phaser.GameObjects.Group;
     enemies: Phaser.GameObjects.Group;
     fireballs: Phaser.GameObjects.Group;
-    player: Phaser.Physics.Arcade.Sprite;
     enemyWalls: Phaser.Physics.Arcade.StaticGroup;
     items: Phaser.GameObjects.Group;
-    blockPlayer: boolean;
-    playerHitted: boolean;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
@@ -19,8 +19,9 @@ export class LevelProperties {
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.enemyWalls = this.scene.physics.add.staticGroup();
         this.elevators = this.scene.physics.add.group({ allowGravity: false });
-        // this.items = this.scene.physics.add.group({ allowGravity: false });
         this.items = this.scene.physics.add.group();
+        // this.player = new PlayerObject(this.scene, 100, 1100, 'dude');
+        // this.items = this.scene.physics.add.group({ allowGravity: false });
     }
 
 }
