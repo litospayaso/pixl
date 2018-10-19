@@ -1,7 +1,7 @@
-export const configItems = function() {
-    this.stars = this.physics.add.group({
-        key: 'star',
-        repeat: 22,
-        setXY: { x: 12, y: 0, stepX: 70 },
-    });
+import { LevelProperties } from '../../core/LevelProperties';
+
+export const configItems = function(props: LevelProperties) {
+    for (let index = 12; index < 2400; index += 70) {
+        props.items.create(index, 0, 'star');
+    }
 };

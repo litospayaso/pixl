@@ -7,7 +7,6 @@ import { configPlatforms } from './configPlatforms';
 
 export class Level1 extends Phaser.Scene {
 
-    private stars: Phaser.GameObjects.Group;
     private scoreText: Phaser.GameObjects.Text;
     private positionText: Phaser.GameObjects.Text;
     private levelProperties: LevelProperties;
@@ -65,7 +64,6 @@ export class Level1 extends Phaser.Scene {
 
     enemyShotFireball() {
         this.levelProperties.enemies.children.iterate( (enemy) => {
-            // tslint:disable-next-line:max-line-length
             if (Math.round(enemy.y + (enemy.height / 2)) === Math.round(this.levelProperties.player.y) + (this.levelProperties.player.height / 2)) {
                 if (!enemy.hasShotted) {
                     enemy.hasShotted = true;
