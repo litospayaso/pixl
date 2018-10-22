@@ -1,11 +1,11 @@
-import { animateSprites } from '../../core/animateSprites';
+import { AnimateSprites } from '../../core/AnimateSprites';
 import { LevelProperties } from '../../core/LevelProperties';
 import { PlayerObject } from '../../core/PlayerObject';
-import { configColliders } from './configColliders';
-import { configEnemies } from './configEnemies';
-import { configItems } from './configItems';
-import { configPlatforms } from './configPlatforms';
-import { configPlayer } from './configPlayer';
+import { ConfigColliders } from './ConfigColliders';
+import { ConfigEnemies } from './ConfigEnemies';
+import { ConfigItems } from './ConfigItems';
+import { ConfigPlatforms } from './ConfigPlatforms';
+import { ConfigPlayer } from './ConfigPlayer';
 
 export class Level1 extends Phaser.Scene {
 
@@ -14,12 +14,12 @@ export class Level1 extends Phaser.Scene {
     private levelProperties: LevelProperties;
     private score = 0;
 
-    private animateSprites = animateSprites.bind(this);
-    private configColliders = configColliders.bind(this);
-    private configEnemies = configEnemies.bind(this);
-    private configItems = configItems.bind(this);
-    private configPlatforms = configPlatforms.bind(this);
-    private configPlayer = configPlayer.bind(this);
+    private animateSprites = AnimateSprites.bind(this);
+    private configColliders = ConfigColliders.bind(this);
+    private configEnemies = ConfigEnemies.bind(this);
+    private configItems = ConfigItems.bind(this);
+    private configPlatforms = ConfigPlatforms.bind(this);
+    private configPlayer = ConfigPlayer.bind(this);
 
     constructor() {
         super({

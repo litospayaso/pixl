@@ -1,6 +1,6 @@
 import { LevelProperties } from '../../core/LevelProperties';
 
-export const configColliders = function(props: LevelProperties) {
+export const ConfigColliders = function(props: LevelProperties) {
     // props.player.setCollideWorldBounds(true);
     props.scene.physics.world.setBoundsCollision(true, true, true, false);
     props.scene.physics.add.collider(props.player, props.platforms);

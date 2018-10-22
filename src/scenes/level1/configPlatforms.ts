@@ -1,5 +1,5 @@
 import { LevelProperties } from '../../core/LevelProperties';
-export const configPlatforms = function(props: LevelProperties) {
+export const ConfigPlatforms = function(props: LevelProperties) {
 
     // Creating bounds of world & cameras
     props.scene.cameras.main.setBounds(0, 0, 2400, 1200);

@@ -1,6 +1,6 @@
 import { LevelProperties } from '../../core/LevelProperties';
 
-export const configEnemies = function(props: LevelProperties) {
+export const ConfigEnemies = function(props: LevelProperties) {
     props.enemies.create(470, 970, 'droid');
     props.enemies.create(520, 970, 'droid');
 

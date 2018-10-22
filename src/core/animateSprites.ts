@@ -1,4 +1,4 @@
-export const animateSprites = function() {
+export const AnimateSprites = function() {
     this.anims.create({
         key: 'playerLeft',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
