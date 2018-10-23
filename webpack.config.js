@@ -32,7 +32,7 @@ module.exports = {
 	plugins: [
 		new CleanWebpackPlugin(['dist']),
 		new HtmlWebpackPlugin({
-			title: 'Argotu'
+			title: 'Piiixls'
 		}),
 		new CopyWebpackPlugin([{
 			from: 'src/assets',
