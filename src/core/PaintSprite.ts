@@ -1,4 +1,4 @@
-import {LevelProperties} from './LevelProperties';
+import { LevelProperties } from './LevelProperties';
 
 let isCreated = false;
 
@@ -6,13 +6,20 @@ export const paintSprite = {
     sheet: undefined,
     newTexture: undefined,
     context: undefined,
+    props: undefined,
     init(props: LevelProperties) {
         if (!isCreated) {
             this.sheet = props.scene.textures.get('player').getSourceImage();
-            this.newTexture = props.scene.textures.createCanvas('playerUpdate', this.sheet.width, this.sheet.height);
+            this.newTexture = props.scene.textures.createCanvas('temp', this.sheet.width, this.sheet.height);
             this.context = this.newTexture['getContext']('2d');
             this.context.drawImage(this.sheet, 0, 0);
+            props.scene.textures.addSpriteSheet('piiixls', this.newTexture.getSourceImage(), {
+                frameWidth: 20,
+                frameHeight: 20,
+            });
+            this.props = props;
             isCreated = true;
+            this.animSprites();
         }
     },
     paint(color: string) {
@@ -40,6 +47,37 @@ export const paintSprite = {
         }
         this.context.putImageData(imageData, 0, 0);
         this.newTexture.refresh();
+        this.props.scene.textures.get('piiixls').source[0].update();
     },
-    refresh: () => this.newTexture.refresh(),
+    animSprites() {
+        this.props.scene.anims.create({
+            key: 'piiixlsLeft',
+            frames: this.props.scene.anims.generateFrameNumbers('piiixls', { start: 5, end: 9 }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.props.scene.anims.create({
+            key: 'piiixlsRight',
+            frames: this.props.scene.anims.generateFrameNumbers('piiixls', { start: 0, end: 4 }),
+            frameRate: 10,
+            repeat: -1,
+        });
+
+        this.props.scene.anims.create({
+            key: 'piiixlsTurnRight',
+            frames: [{ key: 'piiixls', frame: 0 }],
+            frameRate: 20,
+        });
+
+        this.props.scene.anims.create({
+            key: 'piiixlsTurnLeft',
+            frames: [{ key: 'piiixls', frame: 5 }],
+            frameRate: 20,
+        });
+    },
+    // refresh() {
+    //     this.newTexture.refresh();
+    //     this.props.scene.textures.get('piiixls').source[0].update();
+    // },
 };

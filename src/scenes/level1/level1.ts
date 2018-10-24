@@ -20,6 +20,7 @@ export class Level1 extends Phaser.Scene {
     private configItems = ConfigItems.bind(this);
     private configPlatforms = ConfigPlatforms.bind(this);
     private configPlayer = ConfigPlayer.bind(this);
+    private lastButtonPressed = 'Right';
 
     constructor() {
         super({
@@ -47,7 +48,7 @@ export class Level1 extends Phaser.Scene {
         this.initLevel();
 
         this.add.sprite(770, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-            this.scene.launch('dialogsModal', {text: 'hola'});
+            this.scene.launch('dialogsModal', { text: 'hola' });
             this.scene.pause();
         });
 
@@ -66,7 +67,7 @@ export class Level1 extends Phaser.Scene {
     }
 
     enemyShotFireball() {
-        this.levelProperties.enemies.children.iterate( (enemy) => {
+        this.levelProperties.enemies.children.iterate((enemy) => {
             if (Math.round(enemy.y + (enemy.height / 2)) === Math.round(this.levelProperties.player.y) + (this.levelProperties.player.height / 2)) {
                 if (!enemy.hasShotted) {
                     enemy.hasShotted = true;
@@ -84,16 +85,16 @@ export class Level1 extends Phaser.Scene {
     handleKeyboardDownInput() {
         if (!this.levelProperties.player.blockPlayer) {
             if (this.levelProperties.cursors.left.isDown) {
+                this.lastButtonPressed = 'Left';
                 this.levelProperties.player.setVelocityX(-160);
-                // this.levelProperties.player.anims.play('playerLeft', true);
+                this.levelProperties.player.anims.play('piiixlsLeft', true);
             } else if (this.levelProperties.cursors.right.isDown) {
+                this.lastButtonPressed = 'Right';
                 this.levelProperties.player.setVelocityX(160);
-
-                // this.levelProperties.player.anims.play('playerRight', true);
+                this.levelProperties.player.anims.play('piiixlsRight', true);
             } else {
                 this.levelProperties.player.setVelocityX(0);
-
-                // this.levelProperties.player.anims.play('playerTurn');
+                this.levelProperties.player.anims.play(`piiixlsTurn${this.lastButtonPressed}`, true);
             }
         }
     }

@@ -5,7 +5,7 @@ export const ConfigPlayer = function(props: LevelProperties) {
 
     paintSprite.init(props);
 
-    props.player = this.physics.add.sprite(100, 1100, 'playerUpdate');
+    props.player = this.physics.add.sprite(100, 1100, 'piiixls');
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
 
