@@ -85,15 +85,15 @@ export class Level1 extends Phaser.Scene {
         if (!this.levelProperties.player.blockPlayer) {
             if (this.levelProperties.cursors.left.isDown) {
                 this.levelProperties.player.setVelocityX(-160);
-                this.levelProperties.player.anims.play('playerLeft', true);
+                // this.levelProperties.player.anims.play('playerLeft', true);
             } else if (this.levelProperties.cursors.right.isDown) {
                 this.levelProperties.player.setVelocityX(160);
 
-                this.levelProperties.player.anims.play('playerRight', true);
+                // this.levelProperties.player.anims.play('playerRight', true);
             } else {
                 this.levelProperties.player.setVelocityX(0);
 
-                this.levelProperties.player.anims.play('playerTurn');
+                // this.levelProperties.player.anims.play('playerTurn');
             }
         }
     }
