@@ -2,11 +2,12 @@ import { LevelProperties } from './LevelProperties';
 
 let isCreated = false;
 
-export const paintSprite = {
+export const paintPiiixls = {
     sheet: undefined,
     newTexture: undefined,
     context: undefined,
     props: undefined,
+    backgroundColor: '000000ff',
     init(props: LevelProperties) {
         if (!isCreated) {
             this.sheet = props.scene.textures.get('player').getSourceImage();
@@ -35,9 +36,7 @@ export const paintSprite = {
             // tslint:disable-next-line:max-line-length
             newPixelArray.push(`${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`);
         }
-        // tslint:disable-next-line:max-line-length
-        const backgroundColor = newPixelArray.slice(0).sort((a, b) => newPixelArray.slice(0).filter((v) => v === a).length - newPixelArray.slice(0).filter((v) => v === b).length).pop();
-        newPixelArray.forEach((e, i) => newPixelArray[i] = e === backgroundColor ? color : e);
+        newPixelArray.forEach((e, i) => newPixelArray[i] = e === this.backgroundColor ? color : e);
 
         for (let i = 0; i < pixelArray.length; i = i + 4) {
             pixelArray[i] = parseInt(newPixelArray[i / 4].slice(0, 2), 16);
@@ -45,6 +44,7 @@ export const paintSprite = {
             pixelArray[i + 2] = parseInt(newPixelArray[i / 4].slice(4, 6), 16);
             pixelArray[i + 3] = parseInt(newPixelArray[i / 4].slice(6, 8), 16);
         }
+        this.backgroundColor = color;
         this.context.putImageData(imageData, 0, 0);
         this.newTexture.refresh();
         this.props.scene.textures.get('piiixls').source[0].update();
@@ -75,6 +75,13 @@ export const paintSprite = {
             frames: [{ key: 'piiixls', frame: 5 }],
             frameRate: 20,
         });
+    },
+    addColor(color: string) {
+        const result = [];
+        for (let i = 0; i < color.length; i++) {
+            result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
+        }
+        this.paint(result.join(''));
     },
     // refresh() {
     //     this.newTexture.refresh();

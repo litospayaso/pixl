@@ -1,15 +1,14 @@
 import { LevelProperties } from '../../core/LevelProperties';
-import { paintSprite } from '../../core/PaintSprite';
+import { paintPiiixls } from '../../core/PaintPiiixls';
 
 export const ConfigPlayer = function(props: LevelProperties) {
 
-    paintSprite.init(props);
+    paintPiiixls.init(props);
 
     props.player = this.physics.add.sprite(100, 1100, 'piiixls');
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
 
-    paintSprite.paint('ff0000ff');
-    paintSprite.paint('00ff00ff');
+    paintPiiixls.paint('ff0000ff');
 
 };

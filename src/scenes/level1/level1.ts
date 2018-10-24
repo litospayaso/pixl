@@ -1,5 +1,6 @@
 import { AnimateSprites } from '../../core/AnimateSprites';
 import { LevelProperties } from '../../core/LevelProperties';
+import { paintPiiixls } from '../../core/PaintPiiixls';
 import { PlayerObject } from '../../core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
@@ -32,6 +33,7 @@ export class Level1 extends Phaser.Scene {
 
     preload() {
         this.levelProperties = new LevelProperties(this);
+        console.log(this);
     }
 
     initLevel() {
@@ -110,6 +112,7 @@ export class Level1 extends Phaser.Scene {
     collectStar(pl: Phaser.Physics.Arcade.Sprite, star: Phaser.Physics.Arcade.Sprite) {
         star.disableBody(true, true);
 
+        paintPiiixls.addColor(['ff0000ff', '00ff00ff', '0000ffff'][Math.floor((Math.random() * 3))]);
         this.score += 10;
         this.scoreText.setText(`Score: ${this.score}`);
         if (this.score === 120) {

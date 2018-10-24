@@ -11,6 +11,7 @@ export class Config extends Phaser.Game {
             width: 800,
             height: 600,
             parent: 'phaser-example',
+            backgroundColor: '#c7bdb8',
             physics: {
                 default: 'arcade',
                 arcade: {

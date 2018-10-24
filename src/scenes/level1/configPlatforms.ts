@@ -5,18 +5,18 @@ export const ConfigPlatforms = function(props: LevelProperties) {
     props.scene.cameras.main.setBounds(0, 0, 2400, 1200);
     props.scene.physics.world.setBounds(0, 0, 2400, 1200);
 
-    props.scene.physics.add.group({
-        key: 'sky',
-        repeat: 6,
-        setXY: { x: 400, y: 300, stepX: 400 },
-        allowGravity: false,
-    });
-    props.scene.physics.add.group({
-        key: 'sky',
-        repeat: 6,
-        setXY: { x: 400, y: 900, stepX: 400 },
-        allowGravity: false,
-    });
+    // props.scene.physics.add.group({
+    //     key: 'sky',
+    //     repeat: 6,
+    //     setXY: { x: 400, y: 300, stepX: 400 },
+    //     allowGravity: false,
+    // });
+    // props.scene.physics.add.group({
+    //     key: 'sky',
+    //     repeat: 6,
+    //     setXY: { x: 400, y: 900, stepX: 400 },
+    //     allowGravity: false,
+    // });
 
     // Creating props.platforms
     for (let index = 200; index < 2400; index += 400) {
