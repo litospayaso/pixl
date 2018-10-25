@@ -8,7 +8,6 @@ export const ConfigPlayer = function(props: LevelProperties) {
     props.player = this.physics.add.sprite(100, 1100, 'piiixls');
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
-
-    paintPiiixls.paint('ff0000ff');
+    paintPiiixls.paint('00000000');
 
 };

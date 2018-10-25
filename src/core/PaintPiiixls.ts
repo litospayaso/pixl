@@ -21,12 +21,25 @@ export const paintPiiixls = {
             this.props = props;
             isCreated = true;
             this.animSprites();
+        } else {
+            const pixelArray = this.context.getImageData(0, 0, this.sheet.width, this.sheet.height).data;
+            const newPixelArray = {};
+            for (let i = 0; i < pixelArray.length; i = i + 4) {
+                const r = pixelArray[i];
+                const g = pixelArray[i + 1];
+                const b = pixelArray[i + 2];
+                const alpha = pixelArray[i + 3];
+                // tslint:disable-next-line:max-line-length
+                const color = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
+                newPixelArray[color] = newPixelArray[color] ? newPixelArray[color] + 1 : 1;
+            }
+            this.backgroundColor = Object.keys(newPixelArray).reduce((a, b) => newPixelArray[a] > newPixelArray[b] ? a : b);
         }
     },
     paint(color: string) {
         const imageData = this.context.getImageData(0, 0, this.sheet.width, this.sheet.height);
         const pixelArray = imageData.data;
-
+        let currentColor = {};
         const newPixelArray = [];
         for (let i = 0; i < pixelArray.length; i = i + 4) {
             const r = pixelArray[i];
@@ -34,9 +47,12 @@ export const paintPiiixls = {
             const b = pixelArray[i + 2];
             const alpha = pixelArray[i + 3];
             // tslint:disable-next-line:max-line-length
-            newPixelArray.push(`${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`);
+            const rgb = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
+            newPixelArray.push(rgb);
+            currentColor[rgb] = currentColor[rgb] ? currentColor[rgb] + 1 : 1;
         }
-        newPixelArray.forEach((e, i) => newPixelArray[i] = e === this.backgroundColor ? color : e);
+        currentColor = Object.keys(currentColor).reduce((a, b) => currentColor[a] > currentColor[b] ? a : b);
+        newPixelArray.forEach((e, i) => newPixelArray[i] = e === currentColor ? color : e);
 
         for (let i = 0; i < pixelArray.length; i = i + 4) {
             pixelArray[i] = parseInt(newPixelArray[i / 4].slice(0, 2), 16);
@@ -48,6 +64,13 @@ export const paintPiiixls = {
         this.context.putImageData(imageData, 0, 0);
         this.newTexture.refresh();
         this.props.scene.textures.get('piiixls').source[0].update();
+    },
+    addColor(color: string) {
+        const result = [];
+        for (let i = 0; i < color.length; i++) {
+            result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
+        }
+        this.paint(result.join(''));
     },
     animSprites() {
         this.props.scene.anims.create({
@@ -75,13 +98,6 @@ export const paintPiiixls = {
             frames: [{ key: 'piiixls', frame: 5 }],
             frameRate: 20,
         });
-    },
-    addColor(color: string) {
-        const result = [];
-        for (let i = 0; i < color.length; i++) {
-            result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
-        }
-        this.paint(result.join(''));
     },
     // refresh() {
     //     this.newTexture.refresh();

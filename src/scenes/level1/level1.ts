@@ -33,7 +33,6 @@ export class Level1 extends Phaser.Scene {
 
     preload() {
         this.levelProperties = new LevelProperties(this);
-        console.log(this);
     }
 
     initLevel() {
