@@ -104,3 +104,11 @@ export const paintPiiixls = {
     //     this.props.scene.textures.get('piiixls').source[0].update();
     // },
 };
+
+export interface IPiiixls {
+    backgroundColor: string;
+    init: (LevelProperties) => void;
+    paint: (string) => void;
+    addColor: (string) => void;
+    animSprites: () => void;
+}

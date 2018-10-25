@@ -36,7 +36,7 @@ export class Level1 extends Phaser.Scene {
     }
 
     initLevel() {
-        this.animateSprites();
+        this.animateSprites(this.levelProperties);
         this.configPlatforms(this.levelProperties);
         this.configEnemies(this.levelProperties);
         this.configPlayer(this.levelProperties);
@@ -152,6 +152,7 @@ export class Level1 extends Phaser.Scene {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
+            this.levelProperties.player.piiixls.paint('00000000');
             player.blockPlayer = player.playerHitted = true;
             this.changeSpriteDirection(player);
             player.setVelocityY(-300);
@@ -167,6 +168,7 @@ export class Level1 extends Phaser.Scene {
             enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
+            this.levelProperties.player.piiixls.paint('00000000');
             player.blockPlayer = player.playerHitted = true;
             this.changeSpriteDirection(enemy);
             this.changeSpriteDirection(player);
