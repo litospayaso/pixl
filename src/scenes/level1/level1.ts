@@ -131,8 +131,14 @@ export class Level1 extends Phaser.Scene {
     changeSpriteDirection(sprite: Phaser.Physics.Arcade.Sprite) {
         if (sprite.body.touching.right || sprite.body.blocked.right) {
             sprite.setVelocityX(-100);
+            if (sprite.texture.key === 'enemiiixls') {
+                sprite.anims.play('enemiiixlsLeft', true);
+            }
         } else if (sprite.body.touching.left || sprite.body.blocked.left) {
             sprite.setVelocityX(100);
+            if (sprite.texture.key === 'enemiiixls') {
+                sprite.anims.play('enemiiixlsRight', true);
+            }
         }
     }
 

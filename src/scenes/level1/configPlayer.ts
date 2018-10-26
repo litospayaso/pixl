@@ -8,6 +8,6 @@ export const ConfigPlayer = function(props: LevelProperties) {
     props.player.piiixls = paintPiiixls;
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
-    props.player.piiixls.paint('00000000');
+    props.player.piiixls.paint('ff00ffff');
 
 };
