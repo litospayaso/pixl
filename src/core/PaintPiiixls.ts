@@ -88,6 +88,13 @@ export const paintPiiixls = {
         });
 
         this.props.scene.anims.create({
+            key: 'piiixlsDead',
+            frames: this.props.scene.anims.generateFrameNumbers('piiixls', { start: 10, end: 14 }),
+            frameRate: 10,
+            repeat: 1,
+        });
+
+        this.props.scene.anims.create({
             key: 'piiixlsTurnRight',
             frames: [{ key: 'piiixls', frame: 0 }],
             frameRate: 20,

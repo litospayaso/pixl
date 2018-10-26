@@ -160,8 +160,9 @@ export class Level1 extends Phaser.Scene {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
+            player.anims.play('piiixlsDead');
             if (player.piiixls.backgroundColor === '00000000') {
-                player.disableBody(true, true);
+                player.disableBody(true);
                 this.cameras.main.fadeOut(1500);
             } else {
                 this.levelProperties.player.piiixls.paint('00000000');
@@ -181,8 +182,9 @@ export class Level1 extends Phaser.Scene {
             enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
+            player.anims.play('piiixlsDead');
             if (player.piiixls.backgroundColor === '00000000') {
-                player.disableBody(true, true);
+                player.disableBody(true);
                 this.cameras.main.fadeOut(1500);
             } else {
                 player.piiixls.paint('00000000');
