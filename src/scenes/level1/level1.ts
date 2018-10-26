@@ -45,6 +45,7 @@ export class Level1 extends Phaser.Scene {
     }
 
     create() {
+        this.cameras.main.fadeIn(1000);
         this.score = 0;
         this.initLevel();
 
@@ -59,6 +60,8 @@ export class Level1 extends Phaser.Scene {
         this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
         this.inputKeyboard();
+
+        this.cameras.main.on('camerafadeoutcomplete', () => this.scene.start('level1'));
     }
 
     update() {
@@ -151,13 +154,18 @@ export class Level1 extends Phaser.Scene {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
-            this.levelProperties.player.piiixls.paint('00000000');
-            player.blockPlayer = player.playerHitted = true;
-            this.changeSpriteDirection(player);
-            player.setVelocityY(-300);
-            this.flashSprite(player);
-            setTimeout(() => player.blockPlayer = false, 1000);
-            // this.scene.start('level1');
+            if (player.piiixls.backgroundColor === '00000000') {
+                player.disableBody(true, true);
+                this.cameras.main.fadeOut(1500);
+            } else {
+                this.levelProperties.player.piiixls.paint('00000000');
+                player.blockPlayer = player.playerHitted = true;
+                this.changeSpriteDirection(player);
+                player.setVelocityY(-300);
+                this.flashSprite(player);
+                setTimeout(() => player.blockPlayer = false, 1000);
+                // this.scene.start('level1');
+            }
         }
     }
 
@@ -167,14 +175,19 @@ export class Level1 extends Phaser.Scene {
             enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
-            this.levelProperties.player.piiixls.paint('00000000');
-            player.blockPlayer = player.playerHitted = true;
-            this.changeSpriteDirection(enemy);
-            this.changeSpriteDirection(player);
-            player.setVelocityY(-300);
-            this.flashSprite(player);
-            setTimeout(() => player.blockPlayer = false, 1000);
-            // this.scene.start('level1');
+            if (player.piiixls.backgroundColor === '00000000') {
+                player.disableBody(true, true);
+                this.cameras.main.fadeOut(1500);
+            } else {
+                player.piiixls.paint('00000000');
+                player.blockPlayer = player.playerHitted = true;
+                this.changeSpriteDirection(enemy);
+                this.changeSpriteDirection(player);
+                player.setVelocityY(-300);
+                this.flashSprite(player);
+                setTimeout(() => player.blockPlayer = false, 1000);
+                // this.scene.start('level1');
+            }
         }
     }
 
