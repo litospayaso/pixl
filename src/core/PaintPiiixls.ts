@@ -64,7 +64,7 @@ export const paintPiiixls = {
         this.context.putImageData(imageData, 0, 0);
         this.newTexture.refresh();
         this.props.scene.textures.get('piiixls').source[0].update();
-        copyCanvas(this.context.getImageData(0, 0, this.sheet.width, this.sheet.height));
+        // copyCanvas(this.context.getImageData(0, 0, this.sheet.width, this.sheet.height));
     },
     addColor(color: string) {
         const result = [];
@@ -97,13 +97,14 @@ export const paintPiiixls = {
 
         this.props.scene.anims.create({
             key: 'piiixlsDie',
-            frames: [{ key: 'piiixls', frame: 10 }, { key: 'piiixls', frame: 11 }, { key: 'piiixls', frame: 12 }, { key: 'piiixls', frame: 13 }],
+            frames: this.props.scene.anims.generateFrameNumbers('piiixls', { start: 11, end: 14 }),
             frameRate: 20,
-        }, this);
+            repeat: 1,
+        });
 
         this.props.scene.anims.create({
             key: 'piiixlsTurnRight',
-            frames: [{ key: 'piiixls', frame: 4 }],
+            frames: [{ key: 'piiixls', frame: 0 }],
             frameRate: 20,
         });
 
@@ -127,15 +128,15 @@ export interface IPiiixls {
     animSprites: () => void;
 }
 
-const copyCanvas = (sourceCanvas) => {
-    document.body.style.backgroundColor = 'LightGray';
-    const id = document.getElementById('angelita');
-    if (id) {
-        document.getElementById('angelita').remove();
-    }
-    const canvas = document.createElement('CANVAS');
-    canvas.id = 'angelita';
-    const ctx = canvas['getContext']('2d');
-    ctx.putImageData(sourceCanvas, 0, 0);
-    document.body.appendChild(canvas);
-};
+// const copyCanvas = (sourceCanvas) => {
+//     document.body.style.backgroundColor = 'LightGray';
+//     const id = document.getElementById('angelita');
+//     if (id) {
+//         document.getElementById('angelita').remove();
+//     }
+//     const canvas = document.createElement('CANVAS');
+//     canvas.id = 'angelita';
+//     const ctx = canvas['getContext']('2d');
+//     ctx.putImageData(sourceCanvas, 0, 0);
+//     document.body.appendChild(canvas);
+// };

@@ -10,6 +10,7 @@ export const ConfigEnemies = function(props: LevelProperties) {
         enemy.setCollideWorldBounds(true);
         enemy.on('animationcomplete', (anim, frame) => {
             if (anim.key === 'enemiiixlsDie') {
+                enemy.disableBody(true, true);
                 enemy.destroy();
             }
         }, enemy);
