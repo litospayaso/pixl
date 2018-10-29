@@ -10,4 +10,10 @@ export const ConfigPlayer = function(props: LevelProperties) {
     props.player.blockPlayer = false;
     props.player.piiixls.paint('ff00ffff');
 
+    props.player.on('animationcomplete', (anim, frame) => {
+        if (anim.key === 'piiixlsDie') {
+            props.player.disableBody(true);
+            this.cameras.main.fadeOut(1500);
+    }
+    }, props.player);
 };

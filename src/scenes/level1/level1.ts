@@ -160,12 +160,13 @@ export class Level1 extends Phaser.Scene {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
-            player.anims.play('piiixlsDead');
-            if (player.piiixls.backgroundColor === '00000000') {
-                player.disableBody(true);
-                this.cameras.main.fadeOut(1500);
+            if (player.piiixls.backgroundColor === '00000005') {
+                player.anims.play('piiixlsDie');
+                // player.disableBody(true);
+                // this.cameras.main.fadeOut(1500);
             } else {
-                this.levelProperties.player.piiixls.paint('00000000');
+                player.anims.play('piiixlsHit');
+                this.levelProperties.player.piiixls.paint('00000005');
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(player);
                 player.setVelocityY(-300);
@@ -179,15 +180,15 @@ export class Level1 extends Phaser.Scene {
     hitAnEnemy(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         if (enemy.body.touching.up && player.body.touching.down) {
             player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
-            enemy.destroy();
+            enemy.anims.play('enemiiixlsDie');
+            // enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
-            player.anims.play('piiixlsDead');
-            if (player.piiixls.backgroundColor === '00000000') {
-                player.disableBody(true);
-                this.cameras.main.fadeOut(1500);
+            if (player.piiixls.backgroundColor === '00000005') {
+                player.anims.play('piiixlsDie');
             } else {
-                player.piiixls.paint('00000000');
+                player.anims.play('piiixlsHit');
+                player.piiixls.paint('00000005');
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(enemy);
                 this.changeSpriteDirection(player);

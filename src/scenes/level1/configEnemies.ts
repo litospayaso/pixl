@@ -8,5 +8,10 @@ export const ConfigEnemies = function(props: LevelProperties) {
         enemy.body.velocity.x = -100;
         enemy.anims.play('enemiiixlsLeft', true);
         enemy.setCollideWorldBounds(true);
+        enemy.on('animationcomplete', (anim, frame) => {
+            if (anim.key === 'enemiiixlsDie') {
+                enemy.destroy();
+            }
+        }, enemy);
     }, this);
 };
