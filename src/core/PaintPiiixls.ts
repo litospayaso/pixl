@@ -74,13 +74,14 @@ export const paintPiiixls = {
             this.paint(color);
         } else {
             colorWheel = colorWheel.concat(colorWheel.splice(0, colorWheel.indexOf(this.backgroundColor)));
-            this.paint(colorWheel[Math.round(colorWheel.indexOf(color) / 2)]);
+            const normal = Math.round(colorWheel.indexOf(color) / 2);
+            const reverse = Math.round(colorWheel.reverse().indexOf(color) / 2);
+            if (normal < reverse) {
+                this.paint(colorWheel.reverse()[normal]);
+            } else {
+                this.paint(colorWheel[reverse]);
+            }
         }
-        // const result = [];
-        // for (let i = 0; i < color.length; i++) {
-        //     result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
-        // }
-        // this.paint(result.join(''));
     },
     animSprites() {
         this.props.scene.anims.create({
