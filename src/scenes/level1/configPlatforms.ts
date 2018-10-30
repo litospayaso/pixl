@@ -2,15 +2,10 @@ import { LevelProperties } from '../../core/LevelProperties';
 export const ConfigPlatforms = function(props: LevelProperties) {
 
     // Creating bounds of world & cameras
-    props.scene.cameras.main.setBounds(0, 0, 2400, 1200);
-    props.scene.physics.world.setBounds(0, 0, 2400, 1200);
+    props.scene.cameras.main.setBounds(0, 0, 2000, 1200);
+    props.scene.physics.world.setBounds(0, 0, 2000, 1200);
 
-    // props.scene.physics.add.group({
-    //     key: 'sky',
-    //     repeat: 6,
-    //     setXY: { x: 400, y: 300, stepX: 400 },
-    //     allowGravity: false,
-    // });
+    props.scene.add.image(1000, 600, 'level1-background');
     // props.scene.physics.add.group({
     //     key: 'sky',
     //     repeat: 6,
@@ -19,7 +14,7 @@ export const ConfigPlatforms = function(props: LevelProperties) {
     // });
 
     // Creating props.platforms
-    for (let index = 200; index < 2400; index += 400) {
+    for (let index = 200; index < 2000; index += 400) {
         props.platforms.create(index, 1185, 'ground');
     }
     props.platforms.create(600, 400, 'ground');

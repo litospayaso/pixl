@@ -2,6 +2,9 @@ import { LevelProperties } from './LevelProperties';
 
 let isCreated = false;
 
+// tslint:disable-next-line:max-line-length
+export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
+
 export const paintPiiixls = {
     sheet: undefined,
     newTexture: undefined,
@@ -67,11 +70,17 @@ export const paintPiiixls = {
         // copyCanvas(this.context.getImageData(0, 0, this.sheet.width, this.sheet.height));
     },
     addColor(color: string) {
-        const result = [];
-        for (let i = 0; i < color.length; i++) {
-            result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
+        if (this.backgroundColor === '00000005') {
+            this.paint(color);
+        } else {
+            colorWheel = colorWheel.concat(colorWheel.splice(0, colorWheel.indexOf(this.backgroundColor)));
+            this.paint(colorWheel[Math.round(colorWheel.indexOf(color) / 2)]);
         }
-        this.paint(result.join(''));
+        // const result = [];
+        // for (let i = 0; i < color.length; i++) {
+        //     result.push(Math.round((parseInt(color[i], 16) + parseInt(this.backgroundColor[i], 16)) / 2).toString(16));
+        // }
+        // this.paint(result.join(''));
     },
     animSprites() {
         this.props.scene.anims.create({
@@ -140,3 +149,5 @@ export interface IPiiixls {
 //     ctx.putImageData(sourceCanvas, 0, 0);
 //     document.body.appendChild(canvas);
 // };
+
+// a = a.concat(a.splice(0,a.indexOf('a')))

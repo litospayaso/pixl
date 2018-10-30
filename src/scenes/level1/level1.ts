@@ -129,7 +129,6 @@ export class Level1 extends Phaser.Scene {
     }
 
     changeSpriteDirection(sprite: Phaser.Physics.Arcade.Sprite) {
-        // console.log(sprite.anims.currentFrame.textureFrame);
         if (sprite.body.touching.right || sprite.body.blocked.right) {
             sprite.setVelocityX(-100);
             if (sprite.texture.key === 'enemiiixls' && sprite.anims.currentFrame.textureFrame < 10) {

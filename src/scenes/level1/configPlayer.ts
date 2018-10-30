@@ -1,5 +1,5 @@
 import { LevelProperties } from '../../core/LevelProperties';
-import { paintPiiixls } from '../../core/PaintPiiixls';
+import { colorWheel, paintPiiixls } from '../../core/PaintPiiixls';
 
 export const ConfigPlayer = function(props: LevelProperties) {
 
@@ -8,7 +8,7 @@ export const ConfigPlayer = function(props: LevelProperties) {
     props.player.piiixls = paintPiiixls;
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
-    props.player.piiixls.paint('ff00ffff');
+    props.player.piiixls.paint(colorWheel[Math.floor((Math.random() * 12))]);
 
     props.player.on('animationcomplete', (anim, frame) => {
         if (anim.key === 'piiixlsDie') {
