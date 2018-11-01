@@ -111,13 +111,20 @@ export class Level1 extends Phaser.Scene {
         });
     }
 
-    collectStar(pl: PlayerObject, star: ItemObject) {
-        star.disableBody(true, true);
-        pl.piiixls.addColor(star.color);
-        this.score += 10;
-        this.scoreText.setText(`Score: ${this.score}`);
-        if (this.score === 120) {
-            this.scene.start('gameover');
+    collectStar(pl: PlayerObject, item: ItemObject) {
+        switch (item.texture.key) {
+            case 'bucket':
+                pl.piiixls.paint(item.color);
+                break;
+            case 'star':
+                item.disableBody(true, true);
+                pl.piiixls.addColor(item.color);
+                this.score += 10;
+                this.scoreText.setText(`Score: ${this.score}`);
+                // if (this.score === 120) {
+                //     this.scene.start('gameover');
+                // }
+                break;
         }
     }
 

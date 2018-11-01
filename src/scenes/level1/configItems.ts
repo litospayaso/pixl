@@ -7,4 +7,7 @@ export const ConfigItems = function(props: LevelProperties) {
         item.color = colorWheel[Math.floor((Math.random() * 12))];
         item.setTint(parseInt(item.color.slice(0, 6), 16));
     }
+    const bucket = props.items.create(300, 600, 'bucket');
+    bucket.color = colorWheel[Math.floor((Math.random() * 12))];
+    bucket.setTint(parseInt(bucket.color.slice(0, 6), 16));
 };
