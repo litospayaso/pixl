@@ -72,7 +72,7 @@ export class Level1 extends Phaser.Scene {
 
     enemyShotFireball() {
         this.levelProperties.enemies.children.iterate((enemy) => {
-            if (Math.round(enemy.y + (enemy.height / 2)) === Math.round(this.levelProperties.player.y) + (this.levelProperties.player.height / 2)) {
+            if (Math.round(enemy.y + (enemy.height / 2)) === Math.floor((this.levelProperties.player.y) + (this.levelProperties.player.height / 2))) {
                 if (!enemy.hasShotted) {
                     enemy.hasShotted = true;
                     const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);

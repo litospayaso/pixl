@@ -20,8 +20,8 @@ export const paintPiiixls = {
             this.context = this.newTexture['getContext']('2d');
             this.context.drawImage(this.sheet, 0, 0);
             props.scene.textures.addSpriteSheet('piiixls', this.newTexture.getSourceImage(), {
-                frameWidth: 20,
-                frameHeight: 24,
+                frameWidth: 15,
+                frameHeight: 19,
             });
             this.props = props;
             isCreated = true;
