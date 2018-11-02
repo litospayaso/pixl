@@ -39,8 +39,8 @@ export class Level1 extends Phaser.Scene {
         this.animateSprites(this.levelProperties);
         this.configPlatforms(this.levelProperties);
         this.configEnemies(this.levelProperties);
-        this.configPlayer(this.levelProperties);
         this.configItems(this.levelProperties);
+        this.configPlayer(this.levelProperties);
         this.configColliders(this.levelProperties);
     }
 
@@ -75,7 +75,8 @@ export class Level1 extends Phaser.Scene {
             if (Math.round(enemy.y + (enemy.height / 2)) === Math.floor((this.levelProperties.player.y) + (this.levelProperties.player.height / 2))) {
                 if (!enemy.hasShotted) {
                     enemy.hasShotted = true;
-                    const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'ball').setScale(0.5);
+                    const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'pixelBall').setScale(1.5);
+                    ball.anims.play('shootPixelBall');
                     ball.setVelocityX(enemy.body.velocity.x * 2);
                     ball.setCollideWorldBounds(true);
                     ball.body.onWorldBounds = true;

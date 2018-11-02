@@ -19,4 +19,10 @@ export const AnimateSprites = function(props: LevelProperties) {
         frameRate: 20,
         repeat: 0,
     });
+    props.scene.anims.create({
+        key: 'shootPixelBall',
+        frames: props.scene.anims.generateFrameNumbers('pixelBall', { start: 0, end: 7 }),
+        frameRate: 40,
+        repeat: -1,
+    });
 };

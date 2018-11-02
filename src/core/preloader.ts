@@ -16,6 +16,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('player', 'assets/sprites/player.png');
         this.load.image('transparent', 'assets/sprites/transparent.png');
         this.load.image('bucket', 'assets/sprites/bucket.png');
+        this.load.spritesheet('pixelBall', 'assets/sprites/ball.png', { frameWidth: 9, frameHeight: 10 });
         this.load.spritesheet('uiButtons', 'assets/tiles/buttonsUI.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('enemiiixls', 'assets/sprites/enemiiixls.png', { frameWidth: 20, frameHeight: 24 });
         this.load.spritesheet('droid', 'assets/sprites/droid.png', { frameWidth: 32, frameHeight: 32 });
