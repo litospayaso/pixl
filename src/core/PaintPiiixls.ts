@@ -4,6 +4,7 @@ let isCreated = false;
 
 // tslint:disable-next-line:max-line-length
 export let colorWheel = ['ff0000ff', 'ff7f00ff', 'ffff00ff', '7fff00ff', '00ff00ff', '00ff7fff', '00ffffff', '007fffff', '0000ffff', '7f00ffff', 'ff00ffff', 'ff007fff'];
+export const transparentColor = '00000005';
 // tslint:disable-next-line:max-line-length
 // export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
 
@@ -72,7 +73,7 @@ export const paintPiiixls = {
         // copyCanvas(this.context.getImageData(0, 0, this.sheet.width, this.sheet.height));
     },
     addColor(color: string) {
-        if (this.backgroundColor === '00000005') {
+        if (this.backgroundColor === transparentColor) {
             this.paint(color);
         } else {
             colorWheel = colorWheel.concat(colorWheel.splice(0, colorWheel.indexOf(this.backgroundColor)));

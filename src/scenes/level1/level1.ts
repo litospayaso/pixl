@@ -1,6 +1,7 @@
 import { AnimateSprites } from '../../core/AnimateSprites';
 import { ItemObject } from '../../core/ItemObject';
 import { LevelProperties } from '../../core/LevelProperties';
+import { transparentColor } from '../../core/PaintPiiixls';
 import { PlayerObject } from '../../core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
@@ -168,13 +169,13 @@ export class Level1 extends Phaser.Scene {
         if (enemy.body.touching.up && player.body.touching.down) {
             this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
         } else {
-            if (player.piiixls.backgroundColor === '00000005') {
+            if (player.piiixls.backgroundColor === transparentColor) {
                 player.anims.play('piiixlsDie');
                 // player.disableBody(true);
                 // this.cameras.main.fadeOut(1500);
             } else {
                 player.anims.play('piiixlsHit');
-                this.levelProperties.player.piiixls.paint('00000005');
+                this.levelProperties.player.piiixls.paint(transparentColor);
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(player);
                 player.setVelocityY(-300);
@@ -192,11 +193,11 @@ export class Level1 extends Phaser.Scene {
             // enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
-            if (player.piiixls.backgroundColor === '00000005') {
+            if (player.piiixls.backgroundColor === transparentColor) {
                 player.anims.play('piiixlsDie');
             } else {
                 player.anims.play('piiixlsHit');
-                player.piiixls.paint('00000005');
+                player.piiixls.paint(transparentColor);
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(enemy);
                 this.changeSpriteDirection(player);
