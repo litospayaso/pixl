@@ -1,4 +1,4 @@
-import {IPiiixls} from './PaintPiiixls';
+import {IPiiixls} from './Piiixls';
 export class PlayerObject extends Phaser.Physics.Arcade.Sprite {
     blockPlayer: boolean;
     playerHitted: boolean;

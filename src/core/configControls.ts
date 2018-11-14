@@ -8,6 +8,8 @@ export const ConfigControls = function(props: LevelProperties) {
         .on('pointerover', () => props.cursors.right.isDown = true)
         .on('pointerout', () => props.cursors.right.isDown = false);
     props.scene.add.image(750, 550, 'actionControl').setScrollFactor(0).setScale(0.5).setInteractive()
+        .on('pointerover', () => props.cursors.up.isDown = true)
+        .on('pointerout', () => props.cursors.up.isDown = false)
         .on('pointerup', () => {
             if (this.levelProperties.player.body.blocked.down) {
                 this.levelProperties.player.setVelocityY(-470);

@@ -2,7 +2,7 @@ import { AnimateSprites } from '../../core/AnimateSprites';
 import { ConfigControls } from '../../core/configControls';
 import { ItemObject } from '../../core/ItemObject';
 import { LevelProperties } from '../../core/LevelProperties';
-import { transparentColor } from '../../core/PaintPiiixls';
+import { transparentColor } from '../../core/Piiixls';
 import { PlayerObject } from '../../core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';

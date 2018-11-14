@@ -1,5 +1,5 @@
 import { LevelProperties } from '../../core/LevelProperties';
-import { colorWheel } from '../../core/PaintPiiixls';
+import { colorWheel } from '../../core/Piiixls';
 
 export const ConfigItems = function(props: LevelProperties) {
     for (let index = 12; index < 2400; index += 70) {

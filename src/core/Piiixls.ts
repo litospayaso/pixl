@@ -8,7 +8,7 @@ export const transparentColor = '00000005';
 // tslint:disable-next-line:max-line-length
 export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
 
-export const paintPiiixls = {
+export const Piiixls = {
     sheet: undefined,
     newTexture: undefined,
     context: undefined,
