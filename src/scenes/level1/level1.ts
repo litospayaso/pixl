@@ -32,9 +32,7 @@ export class Level1 extends Phaser.Scene {
         });
     }
 
-    // initialize() {
-    //     document.addEventListener("visibilitychange", ()=>console.log('hidden',document.hidden), false)
-    // }
+    // initialize() {}
 
     preload() {
         this.levelProperties = new LevelProperties(this);
@@ -48,6 +46,7 @@ export class Level1 extends Phaser.Scene {
         this.configPlayer(this.levelProperties);
         this.configColliders(this.levelProperties);
         this.configControls(this.levelProperties);
+        this.handleBrowserFocus();
     }
 
     create() {
@@ -128,9 +127,9 @@ export class Level1 extends Phaser.Scene {
                 pl.piiixls.addColor(item.color);
                 this.score += 10;
                 this.scoreText.setText(`Score: ${this.score}`);
-                // if (this.score === 120) {
-                //     this.scene.start('gameover');
-                // }
+                if (this.score === 30) {
+                    this.scene.start('gameover');
+                }
                 break;
         }
     }
@@ -212,6 +211,15 @@ export class Level1 extends Phaser.Scene {
                 // this.scene.start('level1');
             }
         }
+    }
+
+    handleBrowserFocus() {
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.scene.launch('dialogsModal', { text: 'hola' });
+                this.scene.pause();
+            }
+        }, false);
     }
 
 }
