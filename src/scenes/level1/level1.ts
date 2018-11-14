@@ -1,4 +1,5 @@
 import { AnimateSprites } from '../../core/AnimateSprites';
+import { ConfigControls } from '../../core/configControls';
 import { ItemObject } from '../../core/ItemObject';
 import { LevelProperties } from '../../core/LevelProperties';
 import { transparentColor } from '../../core/PaintPiiixls';
@@ -22,6 +23,7 @@ export class Level1 extends Phaser.Scene {
     private configItems = ConfigItems.bind(this);
     private configPlatforms = ConfigPlatforms.bind(this);
     private configPlayer = ConfigPlayer.bind(this);
+    private configControls = ConfigControls.bind(this);
     private lastButtonPressed = 'Right';
 
     constructor() {
@@ -30,7 +32,9 @@ export class Level1 extends Phaser.Scene {
         });
     }
 
-    // initialize() {}
+    // initialize() {
+    //     document.addEventListener("visibilitychange", ()=>console.log('hidden',document.hidden), false)
+    // }
 
     preload() {
         this.levelProperties = new LevelProperties(this);
@@ -43,6 +47,7 @@ export class Level1 extends Phaser.Scene {
         this.configItems(this.levelProperties);
         this.configPlayer(this.levelProperties);
         this.configColliders(this.levelProperties);
+        this.configControls(this.levelProperties);
     }
 
     create() {

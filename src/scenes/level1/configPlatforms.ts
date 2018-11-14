@@ -2,7 +2,7 @@ import { LevelProperties } from '../../core/LevelProperties';
 export const ConfigPlatforms = function(props: LevelProperties) {
 
     // Creating bounds of world & cameras
-    props.scene.cameras.main.setBounds(0, 0, 2000, 1200);
+    props.scene.cameras.main.setBounds(0, 0, 2000, 1300);
     props.scene.physics.world.setBounds(0, 0, 2000, 1200);
 
     props.scene.add.image(1000, 600, 'level1-background');
