@@ -50,6 +50,12 @@ export const ConfigPlatforms = function(props: LevelProperties) {
     props.enemyWalls.create(50 + offsetx, 250 + offsety, 'transparent').visible = false;
     props.enemyWalls.create(750 + offsetx, 220 + offsety, 'transparent').visible = false;
 
+    props.colorWalls.create(412, 1137).setDisplaySize(50, 130).setTintFill(0xfd5308).setAlpha(0.3).body.setSize(50, 130).setOffset(-10, -50).color = 'fd5308';
+    props.colorWalls.create(250, 937).setDisplaySize(100, 200).setTintFill(0xfb9902).setAlpha(0.3).body.setSize(100, 200).setOffset(-35, -85).color = 'fb9902';
+
+    // console.log(props.colorWalls.create(412, 1137).setSizeToFrame(50, 130).setDisplaySize(50, 130).setTintFill(0xfd5308)
+    // .setAlpha(0.3).body.setSize(50, 130));
+
     // Creating props.elevators
     props.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100);
 

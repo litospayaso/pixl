@@ -10,6 +10,7 @@ export class LevelProperties {
     fireballs: Phaser.GameObjects.Group;
     enemyWalls: Phaser.Physics.Arcade.StaticGroup;
     items: Phaser.GameObjects.Group;
+    colorWalls: Phaser.Physics.Arcade.StaticGroup;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
@@ -18,6 +19,7 @@ export class LevelProperties {
         this.platforms = this.scene.physics.add.staticGroup();
         this.cursors = this.scene.input.keyboard.createCursorKeys();
         this.enemyWalls = this.scene.physics.add.staticGroup();
+        this.colorWalls = this.scene.physics.add.staticGroup();
         this.elevators = this.scene.physics.add.group({ allowGravity: false });
         this.items = this.scene.physics.add.group();
         // this.player = new PlayerObject(this.scene, 100, 1100, 'dude');

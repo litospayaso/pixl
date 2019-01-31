@@ -127,6 +127,9 @@ export const Piiixls = {
             frameRate: 20,
         });
     },
+    getColor(): string {
+        return this.backgroundColor.slice(0, -2);
+    },
     // refresh() {
     //     this.newTexture.refresh();
     //     this.props.scene.textures.get('piiixls').source[0].update();
@@ -139,6 +142,7 @@ export interface IPiiixls {
     paint: (string) => void;
     addColor: (string) => void;
     animSprites: () => void;
+    getColor: () => string;
 }
 
 // const copyCanvas = (sourceCanvas) => {

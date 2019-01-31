@@ -1,9 +1,11 @@
 import { LevelProperties } from '../../core/LevelProperties';
+import { PlayerObject } from '../../core/PlayerObject';
 
 export const ConfigColliders = function(props: LevelProperties) {
     props.player.setCollideWorldBounds(true);
     props.scene.physics.world.setBoundsCollision(true, true, true, false);
     props.scene.physics.add.collider(props.player, props.platforms);
+    props.scene.physics.add.collider(props.player, props.colorWalls, () => null, (player: PlayerObject, wall) => player.piiixls.getColor() !== wall.body.color);
     props.scene.physics.add.collider(props.player, props.elevators, this.setBottomBlocked, null, this);
     props.scene.physics.add.collider(props.items, props.platforms);
     props.scene.physics.add.collider(props.enemies, props.platforms);
