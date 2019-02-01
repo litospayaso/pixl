@@ -190,6 +190,23 @@ export class Level1 extends Phaser.Scene {
         }
     }
 
+    hitSpikes(player: PlayerObject, spikes: Phaser.Physics.Arcade.Sprite) {
+        if (player.piiixls.backgroundColor === transparentColor) {
+            player.anims.play('piiixlsDie');
+            // player.disableBody(true);
+            // this.cameras.main.fadeOut(1500);
+        } else {
+            player.anims.play('piiixlsHit');
+            this.levelProperties.player.piiixls.paint(transparentColor);
+            player.blockPlayer = player.playerHitted = true;
+            this.changeSpriteDirection(player);
+            player.setVelocityY(-300);
+            this.flashSprite(player);
+            setTimeout(() => player.blockPlayer = false, 1000);
+            // this.scene.start('level1');
+        }
+    }
+
     hitAnEnemy(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         if (enemy.body.touching.up && player.body.touching.down) {
             player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
