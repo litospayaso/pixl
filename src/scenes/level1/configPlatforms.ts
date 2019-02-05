@@ -59,6 +59,9 @@ export const ConfigPlatforms = function(props: LevelProperties) {
     // Creating props.elevators
     props.elevators.create(300, 700, 'ground').setScale(0.25).setImmovable(true).setVelocityY(100);
 
+    props.finishPlatform.create(1162, 675).setScale(0.5).setTintFill(0x66b032).setAlpha(0.5).body.color = '66b032';
+    props.scene.add.sprite(1162, 675, 'sparkles').setScale(0.5).anims.play('animateSparkles');
+
     props.elevators.children.iterate((child) => {
         props.scene.time.addEvent({
             delay: 4000,

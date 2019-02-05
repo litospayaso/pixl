@@ -21,6 +21,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('rightControl', 'assets/sprites/controllers/right.png');
         this.load.image('actionControl', 'assets/sprites/controllers/action.png');
         this.load.spritesheet('pixelBall', 'assets/sprites/ball.png', { frameWidth: 9, frameHeight: 10 });
+        this.load.spritesheet('sparkles', 'assets/sprites/sparkles.png', { frameWidth: 90, frameHeight: 76 });
         this.load.spritesheet('uiButtons', 'assets/tiles/buttonsUI.png', { frameWidth: 16, frameHeight: 16 });
         this.load.spritesheet('enemiiixls', 'assets/sprites/enemiiixls.png', { frameWidth: 20, frameHeight: 24 });
         this.load.spritesheet('droid', 'assets/sprites/droid.png', { frameWidth: 32, frameHeight: 32 });

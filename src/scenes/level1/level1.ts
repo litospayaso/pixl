@@ -127,10 +127,13 @@ export class Level1 extends Phaser.Scene {
                 pl.piiixls.addColor(item.color);
                 this.score += 10;
                 this.scoreText.setText(`Score: ${this.score}`);
-                if (this.score === 30) {
-                    this.scene.start('gameover');
-                }
                 break;
+        }
+    }
+
+    collideFinishPlatform(player: PlayerObject, platform: Phaser.Physics.Arcade.Sprite) {
+        if (player.piiixls.getColor() === platform.body['color']) {
+            this.scene.start('gameover');
         }
     }
 

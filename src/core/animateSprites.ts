@@ -25,4 +25,10 @@ export const AnimateSprites = function(props: LevelProperties) {
         frameRate: 40,
         repeat: -1,
     });
+    props.scene.anims.create({
+        key: 'animateSparkles',
+        frames: props.scene.anims.generateFrameNumbers('sparkles', { start: 0, end: 35 }),
+        frameRate: 40,
+        repeat: -1,
+    });
 };

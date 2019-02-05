@@ -21,4 +21,5 @@ export const ConfigEnemies = function(props: LevelProperties) {
             }
         }, enemy);
     }, this);
+
 };
