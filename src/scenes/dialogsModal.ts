@@ -21,17 +21,17 @@ export class DialogsModal extends Phaser.Scene {
     private eventCounter;
     private dialog: string[];
 
-    constructor(obj) {
+    constructor() {
         super({
             key: 'dialogsModal',
         });
     }
 
-    create(obj) {
+    create(obj: {text: string, scene: string}) {
         // Create the dialog window
         this._createWindow();
         this.setText(obj.text, true);
-        this._inputKeyboard();
+        this._inputKeyboard(obj.scene);
     }
 
     // Sets the text for the dialog window
@@ -81,12 +81,13 @@ export class DialogsModal extends Phaser.Scene {
         });
     }
 
-    _inputKeyboard() {
+    _inputKeyboard(scene: string) {
         this.input.keyboard.on('keydown', (key) => {
             if (key.key === 'ArrowUp') {
+                console.log(scene);
                 if (this.timedEvent.hasDispatched) {
                     this.scene.stop('dialogsModal');
-                    this.scene.resume('level1');
+                    this.scene.resume(scene);
                 }
             }
         });

@@ -54,8 +54,9 @@ export class Level1 extends Phaser.Scene {
         this.score = 0;
         this.initLevel();
 
-        this.add.sprite(770, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-            this.scene.launch('dialogsModal', { text: 'hola' });
+        // tslint:disable-next-line:max-line-length
+        this.add.sprite(Number(this.game.config.width) - 30, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
+            this.scene.launch('pauseModal', { text: 'hola', scene: 'level1' });
             this.scene.pause();
         });
 
@@ -236,7 +237,7 @@ export class Level1 extends Phaser.Scene {
     handleBrowserFocus() {
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                this.scene.launch('dialogsModal', { text: 'hola' });
+                this.scene.launch('pauseModal', { text: 'hola', scene: 'level1' });
                 this.scene.pause();
             }
         }, false);
