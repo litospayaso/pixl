@@ -123,11 +123,33 @@ export class Level1 extends Phaser.Scene {
             case 'bucket':
                 pl.piiixls.paint(item.color);
                 break;
-            case 'star':
+            case 'pixel':
                 item.disableBody(true, true);
                 pl.piiixls.addColor(item.color);
                 this.score += 10;
                 this.scoreText.setText(`Score: ${this.score}`);
+                break;
+            case 'star':
+                this.scene.launch('dialogsModal', { text: 'Artemisia Gentileschi', scene: 'level1' });
+                item.disableBody(true, true);
+                this.levelProperties.cursors.left.isDown = false;
+                this.levelProperties.cursors.right.isDown = false;
+                this.scene.pause();
+                break;
+            case 'book':
+                // tslint:disable-next-line:max-line-length
+                this.scene.launch('dialogsModal', { text: 'Renacimiento es el nombre dado en el siglo XIX a un amplio movimiento cultural que se produjo en Europa Occidental durante los siglos XV y XVI. Fue un período de transición entre la Edad Media y los inicios de la Edad Moderna', scene: 'level1' });
+                item.disableBody(true, true);
+                this.levelProperties.cursors.left.isDown = false;
+                this.levelProperties.cursors.right.isDown = false;
+                this.scene.pause();
+                break;
+            case 'palette':
+                this.scene.launch('dialogsModal', { text: 'La obra es de trazo gordu.', scene: 'level1' });
+                item.disableBody(true, true);
+                this.levelProperties.cursors.left.isDown = false;
+                this.levelProperties.cursors.right.isDown = false;
+                this.scene.pause();
                 break;
         }
     }

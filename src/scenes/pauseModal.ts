@@ -46,7 +46,7 @@ export class PauseModal extends Phaser.Scene {
 
     _createBackground() {
         this.background = this.add.image(this._getGameWidth() / 2, this._getGameHeight() / 2, '');
-        this.background.setDisplaySize(this._getGameWidth(), this._getGameHeight()).setTintFill(0x000000).setAlpha(0.5);
+        this.background.setDisplaySize(this._getGameWidth(), this._getGameHeight()).setTintFill(0x000000).setAlpha(0.3);
         this.background.setInteractive().on('pointerup', () => this.quit());
     }
 

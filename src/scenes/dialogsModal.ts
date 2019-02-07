@@ -18,8 +18,10 @@ export class DialogsModal extends Phaser.Scene {
     private text: Phaser.GameObjects.Text;
     private graphics: Phaser.GameObjects.Graphics;
     private timedEvent: Phaser.Time.TimerEvent;
+    private background: Phaser.GameObjects.Image;
     private eventCounter;
     private dialog: string[];
+    private callbackScene: string;
 
     constructor() {
         super({
@@ -27,11 +29,12 @@ export class DialogsModal extends Phaser.Scene {
         });
     }
 
-    create(obj: {text: string, scene: string}) {
+    create(obj: { text: string, scene: string }) {
         // Create the dialog window
+        this.callbackScene = obj.scene;
         this._createWindow();
         this.setText(obj.text, true);
-        this._inputKeyboard(obj.scene);
+        this._inputKeyboard();
     }
 
     // Sets the text for the dialog window
@@ -60,6 +63,7 @@ export class DialogsModal extends Phaser.Scene {
         this.text.setText(this.text.text + this.dialog[this.eventCounter - 1]);
         if (this.eventCounter === this.dialog.length) {
             this.timedEvent.remove(null);
+            this.background.setInteractive().on('pointerup', () => this.quit());
         }
     }
 
@@ -81,13 +85,12 @@ export class DialogsModal extends Phaser.Scene {
         });
     }
 
-    _inputKeyboard(scene: string) {
+    _inputKeyboard() {
+        const _this = this;
         this.input.keyboard.on('keydown', (key) => {
             if (key.key === 'ArrowUp') {
-                console.log(scene);
                 if (this.timedEvent.hasDispatched) {
-                    this.scene.stop('dialogsModal');
-                    this.scene.resume(scene);
+                    _this.quit();
                 }
             }
         });
@@ -135,8 +138,20 @@ export class DialogsModal extends Phaser.Scene {
         const gameWidth = this._getGameWidth();
         const dimensions = this._calculateWindowDimensions(gameWidth, gameHeight);
         this.graphics = this.add.graphics();
+        this._createBackground();
 
         this._createOuterWindow(dimensions);
         this._createInnerWindow(dimensions);
     }
+
+    _createBackground() {
+        this.background = this.add.image(this._getGameWidth() / 2, this._getGameHeight() / 2, '');
+        this.background.setDisplaySize(this._getGameWidth(), this._getGameHeight()).setTintFill(0x000000).setAlpha(0.3);
+    }
+
+    quit() {
+        this.scene.stop('dialogsModal');
+        this.scene.resume(this.callbackScene);
+    }
+
 }
