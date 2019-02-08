@@ -4,13 +4,13 @@ export class PauseModal extends Phaser.Scene {
     private background: Phaser.GameObjects.Image;
     private callbackScene: string;
 
-    constructor(obj: {text: string, scene: string}) {
+    constructor(obj: {scene: string}) {
         super({
             key: 'pauseModal',
         });
     }
 
-    create(obj: {text: string, scene: string}) {
+    create(obj: {scene: string}) {
         // Create the dialog window
         this.callbackScene = obj.scene;
         this._createWindow();

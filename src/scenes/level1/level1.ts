@@ -1,3 +1,4 @@
+import levelData from '../../assets/levels/level1.json';
 import { AnimateSprites } from '../../core/AnimateSprites';
 import { ConfigControls } from '../../core/configControls';
 import { ItemObject } from '../../core/ItemObject';
@@ -40,6 +41,7 @@ export class Level1 extends Phaser.Scene {
 
     initLevel() {
         this.animateSprites(this.levelProperties);
+        this.setLevelProperties(this.levelProperties);
         this.configPlatforms(this.levelProperties);
         this.configEnemies(this.levelProperties);
         this.configItems(this.levelProperties);
@@ -49,6 +51,11 @@ export class Level1 extends Phaser.Scene {
         this.handleBrowserFocus();
     }
 
+    setLevelProperties(props: LevelProperties) {
+        props.scene.cameras.main.setBounds(0, 0, 2000, 1300);
+        props.scene.physics.world.setBounds(0, 0, 2000, 1200);
+    }
+
     create() {
         this.cameras.main.fadeIn(1000);
         this.score = 0;
@@ -56,7 +63,7 @@ export class Level1 extends Phaser.Scene {
 
         // tslint:disable-next-line:max-line-length
         this.add.sprite(Number(this.game.config.width) - 30, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-            this.scene.launch('pauseModal', { text: 'hola', scene: 'level1' });
+            this.scene.launch('pauseModal', { scene: 'level1' });
             this.scene.pause();
         });
 
@@ -130,7 +137,7 @@ export class Level1 extends Phaser.Scene {
                 this.scoreText.setText(`Score: ${this.score}`);
                 break;
             case 'star':
-                this.scene.launch('dialogsModal', { text: 'Artemisia Gentileschi', scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: levelData.authorInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
@@ -138,14 +145,14 @@ export class Level1 extends Phaser.Scene {
                 break;
             case 'book':
                 // tslint:disable-next-line:max-line-length
-                this.scene.launch('dialogsModal', { text: 'Renacimiento es el nombre dado en el siglo XIX a un amplio movimiento cultural que se produjo en Europa Occidental durante los siglos XV y XVI. Fue un período de transición entre la Edad Media y los inicios de la Edad Moderna', scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: levelData.periodInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
                 this.scene.pause();
                 break;
             case 'palette':
-                this.scene.launch('dialogsModal', { text: 'La obra es de trazo gordu.', scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: levelData.pieceInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
@@ -259,7 +266,7 @@ export class Level1 extends Phaser.Scene {
     handleBrowserFocus() {
         document.addEventListener('visibilitychange', () => {
             if (document.hidden) {
-                this.scene.launch('pauseModal', { text: 'hola', scene: 'level1' });
+                this.scene.launch('pauseModal', { scene: 'level1' });
                 this.scene.pause();
             }
         }, false);

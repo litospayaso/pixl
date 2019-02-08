@@ -6,7 +6,8 @@
     "allowJs": true,
     "traceResolution": true,
     "typeRoots": [
-      "phaser/@types"
+      "phaser/@types",
+      "json/@types"
     ]
   }
 }

@@ -22,6 +22,9 @@ export class DialogsModal extends Phaser.Scene {
     private eventCounter;
     private dialog: string[];
     private callbackScene: string;
+    private textArray: string[];
+    private textIndex = 0;
+    private animationEnded = false;
 
     constructor() {
         super({
@@ -29,17 +32,19 @@ export class DialogsModal extends Phaser.Scene {
         });
     }
 
-    create(obj: { text: string, scene: string }) {
+    create(obj: { text: string[], scene: string }) {
         // Create the dialog window
         this.callbackScene = obj.scene;
+        this.textArray = obj.text;
         this._createWindow();
-        this.setText(obj.text, true);
+        this.setText(this.textArray[this.textIndex], true);
         this._inputKeyboard();
     }
 
     // Sets the text for the dialog window
     setText(text: string, animate: boolean) {
         // Reset the dialog
+        this.animationEnded = false;
         this.eventCounter = 0;
         this.dialog = text.split('');
         if (this.timedEvent) { this.timedEvent.remove(null); }
@@ -62,8 +67,9 @@ export class DialogsModal extends Phaser.Scene {
         this.eventCounter++;
         this.text.setText(this.text.text + this.dialog[this.eventCounter - 1]);
         if (this.eventCounter === this.dialog.length) {
+            this.textIndex++;
+            this.animationEnded = true;
             this.timedEvent.remove(null);
-            this.background.setInteractive().on('pointerup', () => this.quit());
         }
     }
 
@@ -86,12 +92,9 @@ export class DialogsModal extends Phaser.Scene {
     }
 
     _inputKeyboard() {
-        const _this = this;
         this.input.keyboard.on('keydown', (key) => {
             if (key.key === 'ArrowUp') {
-                if (this.timedEvent.hasDispatched) {
-                    _this.quit();
-                }
+                this._handleClick();
             }
         });
     }
@@ -147,11 +150,23 @@ export class DialogsModal extends Phaser.Scene {
     _createBackground() {
         this.background = this.add.image(this._getGameWidth() / 2, this._getGameHeight() / 2, '');
         this.background.setDisplaySize(this._getGameWidth(), this._getGameHeight()).setTintFill(0x000000).setAlpha(0.3);
+        this.background.setInteractive().on('pointerup', () => this._handleClick());
     }
 
     quit() {
+        this.textIndex = 0;
         this.scene.stop('dialogsModal');
         this.scene.resume(this.callbackScene);
+    }
+
+    _handleClick() {
+        if (this.animationEnded) {
+            if (this.textIndex < this.textArray.length) {
+                this.setText(this.textArray[this.textIndex], true);
+            } else {
+                this.quit();
+            }
+        }
     }
 
 }
