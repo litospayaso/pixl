@@ -36,7 +36,7 @@ export class Level1 extends Phaser.Scene {
     // initialize() {}
 
     preload() {
-        this.levelProperties = new LevelProperties(this);
+        this.levelProperties = new LevelProperties(this, levelData);
     }
 
     initLevel() {
@@ -52,8 +52,8 @@ export class Level1 extends Phaser.Scene {
     }
 
     setLevelProperties(props: LevelProperties) {
-        props.scene.cameras.main.setBounds(0, 0, 2000, 1300);
-        props.scene.physics.world.setBounds(0, 0, 2000, 1200);
+        props.scene.cameras.main.setBounds(0, 0, props.levelData.levelProperties.dimensions.width, props.levelData.levelProperties.dimensions.height + 100);
+        props.scene.physics.world.setBounds(0, 0, props.levelData.levelProperties.dimensions.width, props.levelData.levelProperties.dimensions.height);
     }
 
     create() {
@@ -137,22 +137,21 @@ export class Level1 extends Phaser.Scene {
                 this.scoreText.setText(`Score: ${this.score}`);
                 break;
             case 'star':
-                this.scene.launch('dialogsModal', { text: levelData.authorInfo, scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.authorInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
                 this.scene.pause();
                 break;
             case 'book':
-                // tslint:disable-next-line:max-line-length
-                this.scene.launch('dialogsModal', { text: levelData.periodInfo, scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.periodInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
                 this.scene.pause();
                 break;
             case 'palette':
-                this.scene.launch('dialogsModal', { text: levelData.pieceInfo, scene: 'level1' });
+                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.pieceInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;

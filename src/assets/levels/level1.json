@@ -21,5 +21,11 @@
         "cabello rizado desordenado (símbolo del furor artístico), una cadena con una máscara en el cuello (símbolo la cadena de la tradición y la máscara de la fidelidad a la naturaleza); y una tela tornasolada en el vestido (alusión al virtuosismo técnico), evitando otros atributos.",
         "Artemisia se presenta al espectador en el momento de pintar, cuando aún el lienzo está en blanco, dirigiendo su pincel hacia él, concentrando en su gesto la fuerza creadora.",
         "La postura escorzada, abriendo los brazos en semicírculo para abarcar toda la superficie del lienzo, sosteniendo en su mano izquierda la paleta mientras que la derecha sostiene el pincel, es una clara muestra de la relación de Artemisia con Caravaggio, al igual que el claroscuro empleado"
-    ]
+    ],
+    "levelProperties":{
+        "dimensions":{
+            "width":2000,
+            "height":1200
+        }
+    }
 }
