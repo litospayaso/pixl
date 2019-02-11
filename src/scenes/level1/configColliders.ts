@@ -8,6 +8,7 @@ export const ConfigColliders = function(props: LevelProperties) {
     // tslint:disable-next-line:max-line-length
     props.scene.physics.add.collider(props.player, props.colorWalls, () => null, (player: PlayerObject, wall: Phaser.Physics.Arcade.Sprite) => player.piiixls.getColor() !== wall.body['color']);
     props.scene.physics.add.collider(props.player, props.elevators, this.setBottomBlocked, null, this);
+    props.scene.physics.add.collider(props.player, props.shifters, this.directionBlocked, null, this);
     props.scene.physics.add.collider(props.items, props.platforms);
     props.scene.physics.add.collider(props.enemies, props.platforms);
     props.scene.physics.add.collider(props.enemies, props.enemyWalls, this.changeSpriteDirection);

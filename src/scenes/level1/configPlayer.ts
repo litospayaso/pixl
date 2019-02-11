@@ -8,6 +8,7 @@ export const ConfigPlayer = function(props: LevelProperties) {
     props.player.piiixls = Piiixls;
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
+    props.player.isInAPlatform = false;
     props.player.piiixls.paint(colorWheel[Math.floor((Math.random() * 12))]);
 
     props.player.on('animationcomplete', (anim, frame) => {

@@ -7,6 +7,7 @@ export class LevelProperties {
     platforms: Phaser.GameObjects.Group;
     cursors: Phaser.Input.Keyboard.CursorKeys;
     elevators: Phaser.GameObjects.Group;
+    shifters: Phaser.GameObjects.Group;
     enemies: Phaser.GameObjects.Group;
     fireballs: Phaser.GameObjects.Group;
     enemyWalls: Phaser.Physics.Arcade.StaticGroup;
@@ -25,12 +26,11 @@ export class LevelProperties {
         this.enemyWalls = this.scene.physics.add.staticGroup();
         this.colorWalls = this.scene.physics.add.staticGroup();
         this.elevators = this.scene.physics.add.group({ allowGravity: false });
+        this.shifters = this.scene.physics.add.group({ allowGravity: false });
         this.items = this.scene.physics.add.group();
         this.spikes = this.scene.physics.add.staticGroup();
         this.finishPlatform = this.scene.physics.add.staticGroup();
         this.levelData = levelData;
-        // this.player = new PlayerObject(this.scene, 100, 1100, 'dude');
-        // this.items = this.scene.physics.add.group({ allowGravity: false });
     }
 
 }

@@ -111,7 +111,9 @@ export class Level1 extends Phaser.Scene {
                 this.levelProperties.player.setVelocityX(160);
                 this.levelProperties.player.anims.play('piiixlsRight', true);
             } else {
-                this.levelProperties.player.setVelocityX(0);
+                if (!this.levelProperties.player.isInAPlatform) {
+                    this.levelProperties.player.setVelocityX(0);
+                }
                 this.levelProperties.player.anims.play(`piiixlsTurn${this.lastButtonPressed}`, true);
             }
         }
@@ -171,6 +173,15 @@ export class Level1 extends Phaser.Scene {
             player.body.velocity.y = Math.abs(platform.body['speed']);
             this.levelProperties.player.body.blocked.down = true;
         }
+    }
+
+    directionBlocked(player: Phaser.Physics.Arcade.Sprite, platform: Phaser.Physics.Arcade.Sprite) {
+        if (player.body.touching.down) {
+            this.levelProperties.player.isInAPlatform = true;
+            this.levelProperties.player.setVelocityX(Number(platform.body.velocity.x));
+            this.levelProperties.player.body.blocked.down = true;
+        }
+        setTimeout(() => this.levelProperties.player.isInAPlatform = false, 500);
     }
 
     changeSpriteDirection(sprite: Phaser.Physics.Arcade.Sprite) {
