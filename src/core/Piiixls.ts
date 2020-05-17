@@ -2,10 +2,8 @@ import { LevelProperties } from './LevelProperties';
 
 let isCreated = false;
 
-// tslint:disable-next-line:max-line-length
 // export let colorWheel = ['ff0000ff', 'ff7f00ff', 'ffff00ff', '7fff00ff', '00ff00ff', '00ff7fff', '00ffffff', '007fffff', '0000ffff', '7f00ffff', 'ff00ffff', 'ff007fff'];
 export const transparentColor = '00000005';
-// tslint:disable-next-line:max-line-length
 export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
 
 export const Piiixls = {
@@ -35,7 +33,6 @@ export const Piiixls = {
                 const g = pixelArray[i + 1];
                 const b = pixelArray[i + 2];
                 const alpha = pixelArray[i + 3];
-                // tslint:disable-next-line:max-line-length
                 const color = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
                 newPixelArray[color] = newPixelArray[color] ? newPixelArray[color] + 1 : 1;
             }
@@ -52,7 +49,6 @@ export const Piiixls = {
             const g = pixelArray[i + 1];
             const b = pixelArray[i + 2];
             const alpha = pixelArray[i + 3];
-            // tslint:disable-next-line:max-line-length
             const rgb = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
             newPixelArray.push(rgb);
             currentColor[rgb] = currentColor[rgb] ? currentColor[rgb] + 1 : 1;

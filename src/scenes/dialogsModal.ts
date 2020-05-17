@@ -80,12 +80,13 @@ export class DialogsModal extends Phaser.Scene {
 
         const x = this.padding + 10;
         const y = this.padding + 10;
-
         this.text = this.make.text({
             x,
             y,
             text,
             style: {
+                fontSize: '24px',
+                fontFamily: 'pixel',
                 wordWrap: { width: this._getGameWidth() - (this.padding * 2) - 25 },
             },
         });
@@ -166,6 +167,11 @@ export class DialogsModal extends Phaser.Scene {
             } else {
                 this.quit();
             }
+        } else {
+            this.text.text = this.textArray[this.textIndex];
+            this.textIndex++;
+            this.timedEvent.remove(null);
+            this.animationEnded = true;
         }
     }
 

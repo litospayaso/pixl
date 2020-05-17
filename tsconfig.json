@@ -5,9 +5,17 @@
     "target": "es5",
     "allowJs": true,
     "traceResolution": true,
+    "sourceMap": true,
     "typeRoots": [
       "phaser/@types",
       "json/@types"
-    ]
-  }
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+  },
+  "include": [
+    "./src/**/*",
+  ]  
 }

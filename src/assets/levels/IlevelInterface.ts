@@ -1,3 +1,5 @@
+import { ItemObject } from '@/core/ItemObject';
+
 export interface ILevelInterface {
     level: string;
     name: string;
@@ -41,4 +43,8 @@ export interface IPlatformInterface {
 export interface IMovePlatformInterface extends IPlatformInterface {
     delay: number;
     speed: number;
+}
+
+export interface ItemImterface extends ItemObject {
+    itemType: string;
 }

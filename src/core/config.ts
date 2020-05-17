@@ -1,8 +1,9 @@
-import { DialogsModal } from '../scenes/dialogsModal';
-import { GameOver } from '../scenes/gameOver';
-import { Level1 } from '../scenes/level1/level1';
-import { MainMenu } from '../scenes/mainMenu';
-import { PauseModal } from '../scenes/pauseModal';
+import levelData from '@/assets/levels/level1.json';
+import { DialogsModal } from '@/scenes/dialogsModal';
+import { GameOver } from '@/scenes/gameOver';
+import { Level } from '@/scenes/level/level';
+import { MainMenu } from '@/scenes/mainMenu';
+import { PauseModal } from '@/scenes/pauseModal';
 import { Preloader } from './preloader';
 
 export class Config extends Phaser.Game {
@@ -12,7 +13,7 @@ export class Config extends Phaser.Game {
             width: 800,
             height: 600,
             parent: 'phaser-example',
-            backgroundColor: '#c7bdb8',
+            backgroundColor: '#FFFFFF',
             physics: {
                 default: 'arcade',
                 arcade: {
@@ -20,7 +21,7 @@ export class Config extends Phaser.Game {
                     debug: false,
                 },
             },
-            scene: [Preloader, MainMenu, Level1, GameOver, DialogsModal, PauseModal],
+            scene: [new Preloader(), MainMenu, new Level(levelData), GameOver, DialogsModal, PauseModal],
         });
     }
 }

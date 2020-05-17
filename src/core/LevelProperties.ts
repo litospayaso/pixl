@@ -1,4 +1,4 @@
-import { ILevelInterface } from '../assets/levels/IlevelInterface';
+import { ILevelInterface } from '@/assets/levels/IlevelInterface';
 import { PlayerObject } from './PlayerObject';
 
 export class LevelProperties {
@@ -28,6 +28,7 @@ export class LevelProperties {
         this.elevators = this.scene.physics.add.group({ allowGravity: false });
         this.shifters = this.scene.physics.add.group({ allowGravity: false });
         this.items = this.scene.physics.add.group();
+        // this.items = this.scene.physics.add.group({ allowGravity: false });
         this.spikes = this.scene.physics.add.staticGroup();
         this.finishPlatform = this.scene.physics.add.staticGroup();
         this.levelData = levelData;

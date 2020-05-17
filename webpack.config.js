@@ -23,9 +23,22 @@ module.exports = {
 					transpileOnly: true
 				}
 			}]
-		}]
+		},{
+			test: /\.(woff|woff2|eot|ttf|otf)$/,
+			use: ['file-loader'],
+		}
+		,{
+			test: /\.css$/i,
+			use: ['style-loader', 'css-loader'],
+		  }
+		]
 	},
 	resolve: {
+		alias:{
+			"@/core": path.resolve(__dirname, 'src/core'),
+			"@/assets": path.resolve(__dirname, 'src/assets'),
+			"@/scenes": path.resolve(__dirname, 'src/scenes'),
+		},
 		extensions: ['.ts', '.js', '.json']
 	},
 	devtool: 'inline-source-map',
