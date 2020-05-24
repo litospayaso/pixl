@@ -31,8 +31,6 @@ export class Level extends Phaser.Scene {
     constructor(levelData) {
 
         /**
-         * @TODO Extender la clase level en vez de la clase level1
-         * @TODO añadir el level properties al constructor
          * @TODO crear interfaz del level property.
          */
         super({

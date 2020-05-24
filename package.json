@@ -1,11 +1,12 @@
 {
-  "name": "agortu",
+  "name": "piiixls",
   "version": "1.0.0",
   "description": "test to create a html5 game",
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --watch",
     "build": "webpack",
+    "level": "node scripts/levelGenerator.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

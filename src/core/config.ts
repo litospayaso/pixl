@@ -1,4 +1,4 @@
-import levelData from '@/assets/levels/level1.json';
+import levelData from '@/assets/levels/level1/level1.json';
 import { DialogsModal } from '@/scenes/dialogsModal';
 import { GameOver } from '@/scenes/gameOver';
 import { Level } from '@/scenes/level/level';
