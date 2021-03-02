@@ -15,20 +15,18 @@ export class LevelProperties {
     colorWalls: Phaser.Physics.Arcade.StaticGroup;
     spikes: Phaser.Physics.Arcade.StaticGroup;
     finishPlatform: Phaser.Physics.Arcade.StaticGroup;
+    colorWallsCollider: any;
     levelData: ILevelInterface;
 
     constructor(scene: Phaser.Scene, levelData: ILevelInterface) {
         this.scene = scene;
         this.enemies = this.scene.physics.add.group();
         this.fireballs = this.scene.physics.add.group({ allowGravity: false });
-        this.platforms = this.scene.physics.add.staticGroup();
         this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.enemyWalls = this.scene.physics.add.staticGroup();
         this.colorWalls = this.scene.physics.add.staticGroup();
         this.elevators = this.scene.physics.add.group({ allowGravity: false });
         this.shifters = this.scene.physics.add.group({ allowGravity: false });
-        this.items = this.scene.physics.add.group();
-        // this.items = this.scene.physics.add.group({ allowGravity: false });
+        this.items = this.scene.physics.add.group({ allowGravity: false });
         this.spikes = this.scene.physics.add.staticGroup();
         this.finishPlatform = this.scene.physics.add.staticGroup();
         this.levelData = levelData;

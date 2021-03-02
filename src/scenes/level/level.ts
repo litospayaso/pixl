@@ -1,9 +1,9 @@
-import { ItemImterface } from '@/assets/levels/IlevelInterface';
+import { ILevelInterface, ItemImterface } from '@/assets/levels/IlevelInterface';
 // import levelData from '@/assets/levels/level1.json';
 import { AnimateSprites } from '@/core/AnimateSprites';
 import { ConfigControls } from '@/core/configControls';
 import { LevelProperties } from '@/core/LevelProperties';
-import { transparentColor } from '@/core/Piiixls';
+import { colorWheel } from '@/core/Piiixls';
 import { PlayerObject } from '@/core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
@@ -16,6 +16,7 @@ export class Level extends Phaser.Scene {
     private scoreText: Phaser.GameObjects.Text;
     private positionText: Phaser.GameObjects.Text;
     private levelProperties: LevelProperties;
+    private map: Phaser.Tilemaps.Tilemap;
     private score = 0;
 
     private animateSprites = AnimateSprites.bind(this);
@@ -26,19 +27,15 @@ export class Level extends Phaser.Scene {
     private configPlayer = ConfigPlayer.bind(this);
     private configControls = ConfigControls.bind(this);
     private lastButtonPressed = 'Right';
-    private levelData: any;
+    private levelData: ILevelInterface;
 
-    constructor(levelData) {
+    constructor(levelData: ILevelInterface) {
 
-        /**
-         * @TODO crear interfaz del level property.
-         */
         super({
-            key: levelData.key,
+            key: levelData.properties.find((e) => e.name === 'key').value,
         });
         this.levelData = levelData;
     }
-
     // initialize() {}
 
     preload() {
@@ -54,12 +51,12 @@ export class Level extends Phaser.Scene {
         this.configPlayer(this.levelProperties);
         this.configColliders(this.levelProperties);
         this.configControls(this.levelProperties);
-        this.handleBrowserFocus();
+        // this.handleBrowserFocus();
     }
 
     setLevelProperties(props: LevelProperties) {
-        props.scene.cameras.main.setBounds(0, 0, props.levelData.levelProperties.dimensions.width, props.levelData.levelProperties.dimensions.height + 100);
-        props.scene.physics.world.setBounds(0, 0, props.levelData.levelProperties.dimensions.width, props.levelData.levelProperties.dimensions.height);
+        props.scene.cameras.main.setBounds(0, 0, props.levelData.width * props.levelData.tilewidth , props.levelData.height * props.levelData.tileheight + 100);
+        props.scene.physics.world.setBounds(0, 0, props.levelData.width * props.levelData.tilewidth , props.levelData.height * props.levelData.tileheight);
     }
 
     create() {
@@ -73,9 +70,10 @@ export class Level extends Phaser.Scene {
         });
 
         this.cameras.main.startFollow(this.levelProperties.player, true, 0.09, 0.09);
+        // // this.cameras.main.startFollow(this.levelProperties.player, true, 0.09, 0.09).zoom = 1.7;
 
-        this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000', fontFamily: 'pixel' }).setScrollFactor(0);
-        this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+        // this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#0000FF', fontFamily: 'pixel' }).setScrollFactor(0);
+        // this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#0000FF' }).setScrollFactor(0);
 
         this.inputKeyboard();
 
@@ -83,14 +81,17 @@ export class Level extends Phaser.Scene {
     }
 
     update() {
-        this.positionText.setText(`x: ${this.levelProperties.player.x};y: ${this.levelProperties.player.y};`);
+        // this.positionText.setText(`x: ${this.levelProperties.player.x};y: ${this.levelProperties.player.y};`);
         this.handleKeyboardDownInput();
         this.enemyShotFireball();
     }
 
     enemyShotFireball() {
         this.levelProperties.enemies.children.iterate((enemy) => {
-            if (Math.round(enemy.y + (enemy.height / 2)) === Math.floor((this.levelProperties.player.y) + (this.levelProperties.player.height / 2))) {
+            // if (Math.round(enemy.y + (enemy.height / 2)) > 900)
+            //     console.log(`%c enemy`, `background: #df03fc; color: #f8fc03`, Math.round(enemy.y + (enemy.height / 2)));
+            // console.log(`%c player`, `background: #df03fc; color: #f8fc03`, Math.floor((this.levelProperties.player.y) + (this.levelProperties.player.height / 2));
+            if (Math.round(enemy.y + (enemy.height / 2)) === Math.floor((this.levelProperties.player.y) + (this.levelProperties.player.height / 2)) - 2) {
                 if (!enemy.hasShotted) {
                     enemy.hasShotted = true;
                     const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'pixelBall').setScale(1.5);
@@ -127,7 +128,7 @@ export class Level extends Phaser.Scene {
     inputKeyboard() {
         this.input.keyboard.on('keydown', (key) => {
             if (key.key === 'ArrowUp' && this.levelProperties.player.body.blocked.down) {
-                this.levelProperties.player.setVelocityY(-470);
+                this.levelProperties.player.setVelocityY(-450);
             }
         });
     }
@@ -140,25 +141,26 @@ export class Level extends Phaser.Scene {
             case 'pixel':
                 item.disableBody(true, true);
                 pl.piiixls.addColor(item.color);
-                this.score += 10;
-                this.scoreText.setText(`Score: ${this.score}`);
                 break;
             case 'star':
-                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.authorInfo, scene: 'level1' });
+                const authorInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'authorInfo').value);
+                this.scene.launch('dialogsModal', { text: authorInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
                 this.scene.pause();
                 break;
             case 'book':
-                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.periodInfo, scene: 'level1' });
+                const periodInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'periodInfo').value);
+                this.scene.launch('dialogsModal', { text: periodInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
                 this.scene.pause();
                 break;
             case 'palette':
-                this.scene.launch('dialogsModal', { text: this.levelProperties.levelData.pieceInfo, scene: 'level1' });
+                const pieceInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'pieceInfo').value);
+                this.scene.launch('dialogsModal', { text: pieceInfo, scene: 'level1' });
                 item.disableBody(true, true);
                 this.levelProperties.cursors.left.isDown = false;
                 this.levelProperties.cursors.right.isDown = false;
@@ -168,7 +170,9 @@ export class Level extends Phaser.Scene {
     }
 
     collideFinishPlatform(player: PlayerObject, platform: Phaser.Physics.Arcade.Sprite) {
-        if (player.piiixls.getColor() === platform.body['color']) {
+        console.log(`%c finish`, `background: #df03fc; color: #f8fc03`, player.piiixls.getColor());
+        console.log(`%c finish`, `background: #df03fc; color: #f8fc03`, platform.body['color']);
+        if (player.piiixls.getColor() === parseInt(platform.body['color'], 10)) {
             this.scene.start('gameover');
         }
     }
@@ -178,6 +182,13 @@ export class Level extends Phaser.Scene {
             player.body.velocity.y = Math.abs(platform.body['speed']);
             this.levelProperties.player.body.blocked.down = true;
         }
+    }
+
+    removeLeftRightSpeed(player: Phaser.Physics.Arcade.Sprite, platform: Phaser.Physics.Arcade.Sprite) {
+        if (player.body.touching.left || player.body.touching.right) {
+            this.levelProperties.player.setVelocityX(0);
+        }
+        // setTimeout(() => this.levelProperties.player.isInAPlatform = false, 500);
     }
 
     directionBlocked(player: Phaser.Physics.Arcade.Sprite, platform: Phaser.Physics.Arcade.Sprite) {
@@ -219,15 +230,15 @@ export class Level extends Phaser.Scene {
     hitAFireball(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         enemy.disableBody(true, true);
         if (enemy.body.touching.up && player.body.touching.down) {
-            this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
+            this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -350 : -220);
         } else {
-            if (player.piiixls.backgroundColor === transparentColor) {
+            if (player.piiixls.getColor() === -1) {
                 player.anims.play('piiixlsDie');
                 // player.disableBody(true);
                 // this.cameras.main.fadeOut(1500);
             } else {
                 player.anims.play('piiixlsHit');
-                this.levelProperties.player.piiixls.paint(transparentColor);
+                this.levelProperties.player.piiixls.paint(-1);
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(player);
                 player.setVelocityY(-300);
@@ -239,13 +250,20 @@ export class Level extends Phaser.Scene {
     }
 
     hitSpikes(player: PlayerObject, spikes: Phaser.Physics.Arcade.Sprite) {
-        if (player.piiixls.backgroundColor === transparentColor) {
-            player.anims.play('piiixlsDie');
-            // player.disableBody(true);
-            // this.cameras.main.fadeOut(1500);
+        if (player.piiixls.getColor() === -1) {
+            player.anims.play('piiixlsHit');
+            player.piiixls.paint(-1);
+            player.blockPlayer = player.playerHitted = true;
+            this.changeSpriteDirection(player);
+            player.setVelocityY(-300);
+            this.flashSprite(player);
+            setTimeout(() => {
+                player.disableBody(true);
+                this.cameras.main.fadeOut(1500);
+            }, 200);
         } else {
             player.anims.play('piiixlsHit');
-            this.levelProperties.player.piiixls.paint(transparentColor);
+            this.levelProperties.player.piiixls.paint(-1);
             player.blockPlayer = player.playerHitted = true;
             this.changeSpriteDirection(player);
             player.setVelocityY(-300);
@@ -257,16 +275,26 @@ export class Level extends Phaser.Scene {
 
     hitAnEnemy(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
         if (enemy.body.touching.up && player.body.touching.down) {
-            player.setVelocityY(this.levelProperties.cursors.up.isDown ? -470 : -220);
+            player.setVelocityY(this.levelProperties.cursors.up.isDown ? -350 : -220);
             enemy.anims.play('enemiiixlsDie');
             // enemy.destroy();
             // enemy.disableBody(true, true);
         } else {
-            if (player.piiixls.backgroundColor === transparentColor) {
-                player.anims.play('piiixlsDie');
+            if (player.piiixls.getColor() === -1) {
+                player.anims.play('piiixlsHit');
+                player.piiixls.paint(-1);
+                player.blockPlayer = player.playerHitted = true;
+                this.changeSpriteDirection(enemy);
+                this.changeSpriteDirection(player);
+                player.setVelocityY(-300);
+                this.flashSprite(player);
+                setTimeout(() => {
+                    player.disableBody(true);
+                    this.cameras.main.fadeOut(1500);
+                }, 200);
             } else {
                 player.anims.play('piiixlsHit');
-                player.piiixls.paint(transparentColor);
+                player.piiixls.paint(-1);
                 player.blockPlayer = player.playerHitted = true;
                 this.changeSpriteDirection(enemy);
                 this.changeSpriteDirection(player);

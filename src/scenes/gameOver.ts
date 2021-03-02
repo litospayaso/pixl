@@ -7,8 +7,6 @@ export class GameOver extends Phaser.Scene {
     }
 
     create() {
-        console.log('%c GameOver ', 'background: green; color: white; display: block;');
-
         this.add.sprite(400, 300, 'ayu');
 
         this.add.text(300, 500, 'Game Over - Click to start restart', { font: '16px Courier', fill: '#00ff00' });

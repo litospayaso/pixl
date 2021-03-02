@@ -4,12 +4,16 @@ import { colorWheel, Piiixls } from '@/core/Piiixls';
 export const ConfigPlayer = function(props: LevelProperties) {
 
     Piiixls.init(props);
-    props.player = this.physics.add.sprite(100, 1100, 'piiixls');
+    const playerLayer = props.levelData.layers.find((e) => e.name === 'player');
+    const playerInitalPosition = playerLayer.objects.find((e) => e.name === 'initialPosition');
+    const playerColor = playerInitalPosition.properties.find((e) => e.name === 'color').value;
+    props.player = this.physics.add.sprite(playerInitalPosition.x, playerInitalPosition.y, 'piiixls').setScale(1.5);
+    // props.player.setCircle(10);
     props.player.piiixls = Piiixls;
     props.player.playerHitted = false;
     props.player.blockPlayer = false;
     props.player.isInAPlatform = false;
-    props.player.piiixls.paint(colorWheel[Math.floor((Math.random() * 12))]);
+    props.player.piiixls.paint(playerColor);
 
     props.player.on('animationcomplete', (anim, frame) => {
         if (anim.key === 'piiixlsDie') {

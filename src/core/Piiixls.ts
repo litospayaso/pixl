@@ -4,7 +4,8 @@ let isCreated = false;
 
 // export let colorWheel = ['ff0000ff', 'ff7f00ff', 'ffff00ff', '7fff00ff', '00ff00ff', '00ff7fff', '00ffffff', '007fffff', '0000ffff', '7f00ffff', 'ff00ffff', 'ff007fff'];
 export const transparentColor = '00000005';
-export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
+// export let colorWheel = ['fd5308ff', 'fb9902ff', 'fabc02ff', 'fefe33ff', 'd0ea2bff', '66b032ff', '0391ceff', '0247feff', '3d01a4ff', '8601afff', 'a7194bff', 'fe2712ff'];
+export let colorWheel = ['ffb33fff', 'ffff6eff', 'b7f58cff', '5a87ffff', 'c577ddff', 'ff8478ff'];
 
 export const Piiixls = {
     sheet: undefined,
@@ -39,7 +40,8 @@ export const Piiixls = {
             this.backgroundColor = Object.keys(newPixelArray).reduce((a, b) => newPixelArray[a] > newPixelArray[b] ? a : b);
         }
     },
-    paint(color: string) {
+    paint(index: number) {
+        const color = index === -1 ? transparentColor : colorWheel[index];
         const imageData = this.context.getImageData(0, 0, this.sheet.width, this.sheet.height);
         const pixelArray = imageData.data;
         let currentColor = {};
@@ -62,23 +64,31 @@ export const Piiixls = {
             pixelArray[i + 2] = parseInt(newPixelArray[i / 4].slice(4, 6), 16);
             pixelArray[i + 3] = parseInt(newPixelArray[i / 4].slice(6, 8), 16);
         }
-        this.backgroundColor = color;
+        this.backgroundColor = index;
         this.context.putImageData(imageData, 0, 0);
         this.newTexture.refresh();
         this.props.scene.textures.get('piiixls').source[0].update();
+        // if (this.props.colorWallsCollider) {
+        //     this.props.colorWallsCollider.destroy();
+        // }
+        // if (this.props.colorWalls) {
+        //     (this.props.colorWalls as any).setCollisionByProperty({color: this.getNonCollidingItems()});
+        // }
         // copyCanvas(this.context.getImageData(0, 0, this.sheet.width, this.sheet.height));
     },
-    addColor(color: string) {
-        if (this.backgroundColor === transparentColor) {
-            this.paint(color);
+    addColor(index: number) {
+        if (this.backgroundColor === -1) {
+            this.paint(index);
         } else {
-            colorWheel = colorWheel.concat(colorWheel.splice(0, colorWheel.indexOf(this.backgroundColor)));
-            const normal = Math.round(colorWheel.indexOf(color) / 2);
-            const reverse = Math.round(colorWheel.reverse().indexOf(color) / 2);
+            let wheel = JSON.parse(JSON.stringify(colorWheel));
+            const color = wheel[index];
+            wheel = wheel.concat(wheel.splice(0, this.backgroundColor));
+            const normal = Math.round(wheel.indexOf(color) / 2);
+            const reverse = Math.round(wheel.reverse().indexOf(color) / 2);
             if (normal < reverse) {
-                this.paint(colorWheel.reverse()[normal]);
+                this.paint(colorWheel.indexOf(wheel.reverse()[normal]));
             } else {
-                this.paint(colorWheel[reverse]);
+                this.paint(colorWheel.indexOf(wheel[reverse]));
             }
         }
     },
@@ -123,8 +133,13 @@ export const Piiixls = {
             frameRate: 20,
         });
     },
-    getColor(): string {
-        return this.backgroundColor.slice(0, -2);
+    getColor(): number {
+        return Number(this.backgroundColor);
+        // return this.backgroundColor.slice(0, -2);
+    },
+    getNonCollidingItems(): number[] {
+        return Array.from(Array(colorWheel.length).keys()).filter((e) => e !== this.getColor());
+        // return this.backgroundColor.slice(0, -2);
     },
     // refresh() {
     //     this.newTexture.refresh();
@@ -138,7 +153,8 @@ export interface IPiiixls {
     paint: (string) => void;
     addColor: (string) => void;
     animSprites: () => void;
-    getColor: () => string;
+    getColor: () => number;
+    getNonCollidingItems: () => number[];
 }
 
 // const copyCanvas = (sourceCanvas) => {

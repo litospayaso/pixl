@@ -1,5 +1,5 @@
 {
-  "name": "piiixls",
+  "name": "pixls",
   "version": "1.0.0",
   "description": "test to create a html5 game",
   "main": "index.js",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/litospayaso/agortu.git"
+    "url": "git+https://github.com/litospayaso/pixl.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/litospayaso/agortu/issues"
+    "url": "https://github.com/litospayaso/pixl/issues"
   },
-  "homepage": "https://github.com/litospayaso/agortu#readme",
+  "homepage": "https://github.com/litospayaso/pixl#readme",
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.16",
     "copy-webpack-plugin": "^4.5.2",
