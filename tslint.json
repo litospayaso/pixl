@@ -29,6 +29,7 @@
         "label-position": true,
         "max-line-length": false,
         "member-access": false,
+        "space-in-parens": ["error", "always"],
         "member-ordering": [
             true,
             {

@@ -5,8 +5,8 @@ export const ConfigColliders = function(props: LevelProperties) {
     props.player.setCollideWorldBounds(true);
     props.scene.physics.world.setBoundsCollision(true, true, true, false);
 
-    (props.platforms as any).setCollisionBetween( 1, 50 );
-    (props.enemyWalls as any).setCollisionBetween( 1, 50 );
+    (props.platforms as any).setCollisionBetween(1, 50);
+    (props.enemyWalls as any).setCollisionBetween(1, 50);
     // props.colorWallsCollider = (props.colorWalls as any).setCollisionByProperty({color: props.player.piiixls.getNonCollidingItems()});
     props.scene.physics.add.collider(props.player, props.platforms);
     props.scene.physics.add.collider(props.player, props.colorWalls, () => null, (player: PlayerObject, wall: Phaser.Physics.Arcade.Sprite) => player.piiixls.getColor() !== wall.body['color']);

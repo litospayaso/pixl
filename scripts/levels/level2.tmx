@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="70" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="20">
+<map version="1.4" tiledversion="1.4.3" orientation="orthogonal" renderorder="right-down" width="70" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="13" nextobjectid="31">
  <editorsettings>
   <export target="../../src/assets/levels/level1/level1.json" format="json"/>
  </editorsettings>
@@ -196,7 +196,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,47,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,45,45,45,46,46,46,47,47,47,49,49,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,44,44,44,45,45,45,46,46,46,47,47,47,48,48,48,49,49,49,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -226,38 +226,104 @@
 </data>
  </layer>
  <objectgroup id="8" name="player">
-  <object id="1" name="initialPosition" x="218.287" y="335.363">
+  <object id="1" name="initialPosition" x="1121.29" y="340.363">
    <properties>
-    <property name="color" value="1"/>
+    <property name="color" value="5"/>
    </properties>
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="11" name="items">
-  <object id="13" name="bucket" x="97" y="190">
+  <object id="13" name="bucket" x="513" y="631">
    <properties>
-    <property name="color" value="3"/>
+    <property name="color" value="1"/>
    </properties>
    <point/>
   </object>
-  <object id="14" name="star" x="289" y="251">
+  <object id="14" name="star" x="2001" y="95">
    <point/>
   </object>
-  <object id="16" name="book" x="704" y="254">
+  <object id="16" name="book" x="298" y="596">
    <point/>
   </object>
-  <object id="17" name="palette" x="1117" y="344">
+  <object id="17" name="palette" x="161" y="298">
    <point/>
   </object>
-  <object id="18" name="pixel" x="1431" y="459">
+  <object id="18" name="pixel" x="789" y="625">
    <properties>
-    <property name="color" value="1"/>
+    <property name="color" value="0"/>
    </properties>
    <point/>
   </object>
   <object id="19" name="finishPlatform" x="1255" y="639">
    <properties>
     <property name="color" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="20" name="pixel" x="581" y="255">
+   <properties>
+    <property name="color" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="21" name="bucket" x="466" y="631">
+   <properties>
+    <property name="color" value="0"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="22" name="bucket" x="556" y="631">
+   <properties>
+    <property name="color" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="23" name="bucket" x="600" y="632">
+   <properties>
+    <property name="color" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="24" name="bucket" x="645" y="633">
+   <properties>
+    <property name="color" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="25" name="bucket" x="693" y="633">
+   <properties>
+    <property name="color" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="26" name="pixel" x="877" y="630">
+   <properties>
+    <property name="color" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="27" name="pixel" x="831" y="628">
+   <properties>
+    <property name="color" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="28" name="pixel" x="918" y="621">
+   <properties>
+    <property name="color" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="29" name="pixel" x="963" y="627">
+   <properties>
+    <property name="color" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="30" name="pixel" x="1024" y="638">
+   <properties>
+    <property name="color" value="5"/>
    </properties>
    <point/>
   </object>
