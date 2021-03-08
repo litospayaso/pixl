@@ -6,6 +6,8 @@
   "scripts": {
     "start": "webpack-dev-server --watch",
     "build": "webpack",
+    "publish": "gh-pages -d dist",
+    "deploy": "npm run build && npm run publish",
     "level": "node scripts/levelGenerator.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

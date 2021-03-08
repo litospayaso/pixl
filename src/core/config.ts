@@ -19,7 +19,7 @@ export class Config extends Phaser.Game {
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 600 },
-                    debug: true,
+                    // debug: true,
                     // debug: false,
                 },
             },
