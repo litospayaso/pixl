@@ -29,6 +29,12 @@ export class Level extends Phaser.Scene {
   private lastButtonPressed = 'Right';
   private levelData: ILevelInterface;
 
+  private itemsAlreadyGetted = {
+    palette: false,
+    star: false,
+    book: false,
+  };
+
   constructor(levelData: ILevelInterface) {
 
     super({
@@ -137,12 +143,17 @@ export class Level extends Phaser.Scene {
     switch (item.itemType) {
       case 'bucket':
         pl.piiixls.paint(item.color);
+        this.updateColorWalls();
         break;
       case 'pixel':
         item.disableBody(true, true);
         pl.piiixls.addColor(item.color);
+        this.updateColorWalls();
         break;
       case 'star':
+        /**
+         * @TODO lo mismo que con el palette
+         */
         const authorInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'authorInfo').value);
         this.scene.launch('dialogsModal', { text: authorInfo, scene: 'level1' });
         item.disableBody(true, true);
@@ -151,6 +162,9 @@ export class Level extends Phaser.Scene {
         this.scene.pause();
         break;
       case 'book':
+        /**
+         * @TODO lo mismo que con el palette
+         */
         const periodInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'periodInfo').value);
         this.scene.launch('dialogsModal', { text: periodInfo, scene: 'level1' });
         item.disableBody(true, true);
@@ -160,18 +174,19 @@ export class Level extends Phaser.Scene {
         break;
       case 'palette':
         const pieceInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'pieceInfo').value);
-        this.scene.launch('dialogsModal', { text: pieceInfo, scene: 'level1' });
         item.disableBody(true, true);
-        this.levelProperties.cursors.left.isDown = false;
-        this.levelProperties.cursors.right.isDown = false;
-        this.scene.pause();
+        if (!this.itemsAlreadyGetted.palette) {
+          this.scene.launch('dialogsModal', { text: pieceInfo, scene: 'level1' });
+          this.levelProperties.cursors.left.isDown = false;
+          this.levelProperties.cursors.right.isDown = false;
+          this.scene.pause();
+        }
+        this.itemsAlreadyGetted.palette = true;
         break;
     }
   }
 
   collideFinishPlatform(player: PlayerObject, platform: Phaser.Physics.Arcade.Sprite) {
-    console.log(`%c finish`, `background: #df03fc; color: #f8fc03`, player.piiixls.getColor());
-    console.log(`%c finish`, `background: #df03fc; color: #f8fc03`, platform.body['color']);
     if (player.piiixls.getColor() === parseInt(platform.body['color'], 10)) {
       this.scene.start('gameover');
     }
@@ -244,6 +259,7 @@ export class Level extends Phaser.Scene {
         player.setVelocityY(-300);
         this.flashSprite(player);
         setTimeout(() => player.blockPlayer = false, 1000);
+        this.updateColorWalls();
         // this.scene.start('level1');
       }
     }
@@ -269,6 +285,7 @@ export class Level extends Phaser.Scene {
       player.setVelocityY(-300);
       this.flashSprite(player);
       setTimeout(() => player.blockPlayer = false, 1000);
+      this.updateColorWalls();
       // this.scene.start('level1');
     }
   }
@@ -301,6 +318,7 @@ export class Level extends Phaser.Scene {
         player.setVelocityY(-300);
         this.flashSprite(player);
         setTimeout(() => player.blockPlayer = false, 1000);
+        this.updateColorWalls();
         // this.scene.start('level1');
       }
     }
@@ -313,6 +331,13 @@ export class Level extends Phaser.Scene {
         this.scene.pause();
       }
     }, false);
+  }
+
+  updateColorWalls() {
+    const minData = this.levelProperties.levelData.layers.find((e) => e.name === 'colorWalls').data.filter((e) => e !== 0).sort((a, b) => a - b).filter ((value, index, array) => array.indexOf (value) === index);
+    minData.forEach((tile) => {
+      (this.levelProperties.colorWalls as any).setCollision(tile, tile !== minData[0] + this.levelProperties.player.piiixls.getColor());
+    });
   }
 
 }

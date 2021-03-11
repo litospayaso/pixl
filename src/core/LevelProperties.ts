@@ -17,6 +17,7 @@ export class LevelProperties {
   finishPlatform: Phaser.Physics.Arcade.StaticGroup;
   colorWallsCollider: any;
   levelData: ILevelInterface;
+  groundTiles: Phaser.Tilemaps.Tileset;
 
   constructor(scene: Phaser.Scene, levelData: ILevelInterface) {
     this.scene = scene;

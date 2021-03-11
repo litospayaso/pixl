@@ -279,7 +279,7 @@
    </properties>
    <point/>
   </object>
-  <object id="23" name="bucket" x="600" y="632">
+  <object id="23" name="bucket" x="285" y="329">
    <properties>
     <property name="color" value="3"/>
    </properties>
