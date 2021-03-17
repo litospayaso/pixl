@@ -18,7 +18,7 @@ export class MainMenu extends Phaser.Scene {
 
         bg.once('pointerup', function() {
 
-            this.scene.start('level1');
+            this.scene.start('level3');
 
         }, this);
     }
