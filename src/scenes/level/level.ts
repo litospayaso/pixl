@@ -83,7 +83,7 @@ export class Level extends Phaser.Scene {
 
     this.inputKeyboard();
 
-    this.cameras.main.on('camerafadeoutcomplete', () => this.scene.start('level1'));
+    this.cameras.main.on('camerafadeoutcomplete', () => this.scene.start(this.levelData.properties.find((e) => e.name === 'key').value));
   }
 
   update() {
@@ -140,6 +140,7 @@ export class Level extends Phaser.Scene {
   }
 
   itemCollision(pl: PlayerObject, item: ItemImterface) {
+    const levelName = this.levelData.properties.find((e) => e.name === 'key').value;
     switch (item.itemType) {
       case 'bucket':
         pl.piiixls.paint(item.color);
@@ -151,32 +152,32 @@ export class Level extends Phaser.Scene {
         this.updateColorWalls();
         break;
       case 'star':
-        /**
-         * @TODO lo mismo que con el palette
-         */
-        const authorInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'authorInfo').value);
-        this.scene.launch('dialogsModal', { text: authorInfo, scene: 'level1' });
         item.disableBody(true, true);
-        this.levelProperties.cursors.left.isDown = false;
-        this.levelProperties.cursors.right.isDown = false;
-        this.scene.pause();
+        if (!this.itemsAlreadyGetted.star) {
+          const authorInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'authorInfo').value);
+          this.scene.launch('dialogsModal', { text: authorInfo, scene: levelName });
+          this.levelProperties.cursors.left.isDown = false;
+          this.levelProperties.cursors.right.isDown = false;
+          this.scene.pause();
+        }
+        this.itemsAlreadyGetted.star = true;
         break;
       case 'book':
-        /**
-         * @TODO lo mismo que con el palette
-         */
-        const periodInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'periodInfo').value);
-        this.scene.launch('dialogsModal', { text: periodInfo, scene: 'level1' });
         item.disableBody(true, true);
-        this.levelProperties.cursors.left.isDown = false;
-        this.levelProperties.cursors.right.isDown = false;
-        this.scene.pause();
+        if (!this.itemsAlreadyGetted.book) {
+          const periodInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'periodInfo').value);
+          this.scene.launch('dialogsModal', { text: periodInfo, scene: levelName });
+          this.levelProperties.cursors.left.isDown = false;
+          this.levelProperties.cursors.right.isDown = false;
+          this.scene.pause();
+        }
+        this.itemsAlreadyGetted.book = true;
         break;
       case 'palette':
-        const pieceInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'pieceInfo').value);
         item.disableBody(true, true);
         if (!this.itemsAlreadyGetted.palette) {
-          this.scene.launch('dialogsModal', { text: pieceInfo, scene: 'level1' });
+          const pieceInfo = JSON.parse(this.levelData.properties.find((e) => e.name === 'pieceInfo').value);
+          this.scene.launch('dialogsModal', { text: pieceInfo, scene: levelName });
           this.levelProperties.cursors.left.isDown = false;
           this.levelProperties.cursors.right.isDown = false;
           this.scene.pause();
@@ -334,10 +335,12 @@ export class Level extends Phaser.Scene {
   }
 
   updateColorWalls() {
-    const minData = this.levelProperties.levelData.layers.find((e) => e.name === 'colorWalls').data.filter((e) => e !== 0).sort((a, b) => a - b).filter ((value, index, array) => array.indexOf (value) === index);
-    minData.forEach((tile) => {
-      (this.levelProperties.colorWalls as any).setCollision(tile, tile !== minData[0] + this.levelProperties.player.piiixls.getColor());
-    });
+    if (this.levelProperties.levelData.layers.find((e) => e.name === 'colorWalls')) {
+      const minData = this.levelProperties.levelData.layers.find((e) => e.name === 'colorWalls').data.filter((e) => e !== 0).sort((a, b) => a - b).filter((value, index, array) => array.indexOf(value) === index);
+      minData.forEach((tile) => {
+        (this.levelProperties.colorWalls as any).setCollision(tile, tile !== minData[0] + this.levelProperties.player.piiixls.getColor());
+      });
+    }
   }
 
 }

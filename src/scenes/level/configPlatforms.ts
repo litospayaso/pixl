@@ -2,13 +2,15 @@ import { LevelProperties } from '@/core/LevelProperties';
 import { colorWheel } from '@/core/Piiixls';
 export const ConfigPlatforms = function(props: LevelProperties) {
   const levelname = props.levelData.properties.find((e) => e.name === 'key').value;
-  props.scene.add.image(this.textures.get(`${levelname}-background`).get().width / 2, this.textures.get('level1-background').get().height / 2, 'level1-background');
+  props.scene.add.image(this.textures.get(`${levelname}-background`).get().width / 2, this.textures.get(`${levelname}-background`).get().height / 2, `${levelname}-background`);
 
   this.map = this.make.tilemap({ key: `${levelname}-map` });
   props.groundTiles = this.map.addTilesetImage('ground_tiles');
   props.platforms = (this.map as any).createLayer('ground_tiles', props.groundTiles, 0, 0);
   props.enemyWalls = (this.map as any).createLayer('enemyWalls', props.groundTiles, 0, 0);
-  (props.enemyWalls as any).setAlpha(0);
+  if ((props.enemyWalls as any)) {
+    (props.enemyWalls as any).setAlpha(0);
+  }
 
   // const colorWallsLayer = props.levelData.layers.find((e) => e.name === 'colorWalls');
   // const tileSize = props.levelData.tilewidth;
@@ -36,37 +38,38 @@ export const ConfigPlatforms = function(props: LevelProperties) {
   //     // y -= tileSize;
   //   }
   // });
-  props.colorWalls = ( this.map as any ).createLayer( 'colorWalls', props.groundTiles, 0, 0 );
+  props.colorWalls = (this.map as any).createLayer('colorWalls', props.groundTiles, 0, 0);
 
-  props.levelData.layers.find((e) => e.name === 'elevators').objects.forEach((e) => {
-    const speed = e.properties.find((prop) => prop.name === 'speed').value;
-    const delay = e.properties.find((prop) => prop.name === 'delay').value;
-    if (e.name === 'elevator') {
-      props.elevators.create(e.x, e.y, 'all_tiles').setFrame(29).setImmovable(true).setVelocityY(speed).delay = delay;
-    }
-    if (e.name === 'shifter') {
-      props.shifters.create(e.x, e.y, 'all_tiles').setFrame(28).setImmovable(true).setVelocityX(speed).delay = delay;
-    }
-  });
-
-  props.elevators.children.iterate((child) => {
-    props.scene.time.addEvent({
-      delay: child.delay,
-      loop: true,
-      callback() {
-        child.body.velocity.y *= -1;
-      },
+  if (props.levelData.layers.find((e) => e.name === 'elevators')) {
+    props.levelData.layers.find((e) => e.name === 'elevators').objects.forEach((e) => {
+      const speed = e.properties.find((prop) => prop.name === 'speed').value;
+      const delay = e.properties.find((prop) => prop.name === 'delay').value;
+      if (e.name === 'elevator') {
+        props.elevators.create(e.x, e.y, 'all_tiles').setFrame(29).setImmovable(true).setVelocityY(speed).delay = delay;
+      }
+      if (e.name === 'shifter') {
+        props.shifters.create(e.x, e.y, 'all_tiles').setFrame(28).setImmovable(true).setVelocityX(speed).delay = delay;
+      }
     });
-  }, this);
+    props.elevators.children.iterate((child) => {
+      props.scene.time.addEvent({
+        delay: child.delay,
+        loop: true,
+        callback() {
+          child.body.velocity.y *= -1;
+        },
+      });
+    }, this);
 
-  props.shifters.children.iterate((child) => {
-    props.scene.time.addEvent({
-      delay: child.delay,
-      loop: true,
-      callback() {
-        child.body.velocity.x *= -1;
-      },
-    });
-  }, this);
+    props.shifters.children.iterate((child) => {
+      props.scene.time.addEvent({
+        delay: child.delay,
+        loop: true,
+        callback() {
+          child.body.velocity.x *= -1;
+        },
+      });
+    }, this);
+  }
 
 };
