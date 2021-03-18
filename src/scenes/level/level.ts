@@ -114,6 +114,9 @@ export class Level extends Phaser.Scene {
 
   handleKeyboardDownInput() {
     if (!this.levelProperties.player.blockPlayer) {
+      if (this.levelProperties.cursors.up.isDown && this.levelProperties.player.body.blocked.down) {
+          this.levelProperties.player.setVelocityY(-350);
+      }
       if (this.levelProperties.cursors.left.isDown) {
         this.lastButtonPressed = 'Left';
         this.levelProperties.player.setVelocityX(-160);
@@ -133,8 +136,13 @@ export class Level extends Phaser.Scene {
 
   inputKeyboard() {
     this.input.keyboard.on('keydown', (key) => {
-      if (key.key === 'ArrowUp' && this.levelProperties.player.body.blocked.down) {
-        this.levelProperties.player.setVelocityY(-450);
+      if (key.key === 'ArrowUp') {
+        this.levelProperties.cursors.up.isDown = true;
+      }
+    });
+    this.input.keyboard.on('keyup', (key) => {
+      if (key.key === 'ArrowUp') {
+        this.levelProperties.cursors.up.isDown = false;
       }
     });
   }
