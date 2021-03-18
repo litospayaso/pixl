@@ -115,7 +115,7 @@ export class Level extends Phaser.Scene {
   handleKeyboardDownInput() {
     if (!this.levelProperties.player.blockPlayer) {
       if (this.levelProperties.cursors.up.isDown && this.levelProperties.player.body.blocked.down) {
-          this.levelProperties.player.setVelocityY(-350);
+          this.levelProperties.player.setVelocityY(-450);
       }
       if (this.levelProperties.cursors.left.isDown) {
         this.lastButtonPressed = 'Left';
