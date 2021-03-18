@@ -66,12 +66,13 @@ export class Level extends Phaser.Scene {
   }
 
   create() {
+    const levelName = this.levelData.properties.find((e) => e.name === 'key').value;
     this.cameras.main.fadeIn(1000);
     this.score = 0;
     this.initLevel();
 
     this.add.sprite(Number(this.game.config.width) - 30, 30, 'uiButtons').setScrollFactor(0).setScale(2.5).setFrame(11).setInteractive().on('pointerup', () => {
-      this.scene.launch('pauseModal', { scene: 'level1' });
+      this.scene.launch('pauseModal', { scene: levelName });
       this.scene.pause();
     });
 
@@ -334,9 +335,10 @@ export class Level extends Phaser.Scene {
   }
 
   handleBrowserFocus() {
+    const levelName = this.levelData.properties.find((e) => e.name === 'key').value;
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) {
-        this.scene.launch('pauseModal', { scene: 'level1' });
+        this.scene.launch('pauseModal', { scene: levelName });
         this.scene.pause();
       }
     }, false);
