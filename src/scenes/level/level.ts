@@ -116,7 +116,7 @@ export class Level extends Phaser.Scene {
   handleKeyboardDownInput() {
     if (!this.levelProperties.player.blockPlayer) {
       if (this.levelProperties.cursors.up.isDown && this.levelProperties.player.body.blocked.down) {
-          this.levelProperties.player.setVelocityY(-450);
+        this.levelProperties.player.setVelocityY(-450);
       }
       if (this.levelProperties.cursors.left.isDown) {
         this.lastButtonPressed = 'Left';
@@ -294,7 +294,14 @@ export class Level extends Phaser.Scene {
       this.changeSpriteDirection(player);
       player.setVelocityY(-300);
       this.flashSprite(player);
-      setTimeout(() => player.blockPlayer = false, 1000);
+      this.levelProperties.scene.time.addEvent({
+        delay: 1000,
+        loop: false,
+        callback() {
+          player.blockPlayer = false;
+        },
+      });
+      // setTimeout(() => player.blockPlayer = false, 1000);
       this.updateColorWalls();
       // this.scene.start('level1');
     }

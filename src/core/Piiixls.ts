@@ -41,33 +41,35 @@ export const Piiixls = {
     }
   },
   paint(index: number) {
-    const color = index === -1 ? transparentColor : colorWheel[index];
-    const imageData = this.context.getImageData(0, 0, this.sheet.width, this.sheet.height);
-    const pixelArray = imageData.data;
-    let currentColor = {};
-    const newPixelArray = [];
-    for (let i = 0; i < pixelArray.length; i = i + 4) {
-      const r = pixelArray[i];
-      const g = pixelArray[i + 1];
-      const b = pixelArray[i + 2];
-      const alpha = pixelArray[i + 3];
-      const rgb = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
-      newPixelArray.push(rgb);
-      currentColor[rgb] = currentColor[rgb] ? currentColor[rgb] + 1 : 1;
-    }
-    currentColor = Object.keys(currentColor).reduce((a, b) => currentColor[a] > currentColor[b] ? a : b);
-    newPixelArray.forEach((e, i) => newPixelArray[i] = e === currentColor ? color : e);
+    if (this.backgroundColor !== index) {
+      const color = index === -1 ? transparentColor : colorWheel[index];
+      const imageData = this.context.getImageData(0, 0, this.sheet.width, this.sheet.height);
+      const pixelArray = imageData.data;
+      let currentColor = {};
+      const newPixelArray = [];
+      for (let i = 0; i < pixelArray.length; i = i + 4) {
+        const r = pixelArray[i];
+        const g = pixelArray[i + 1];
+        const b = pixelArray[i + 2];
+        const alpha = pixelArray[i + 3];
+        const rgb = `${r.toString(16).length === 1 ? '0'.concat(r.toString(16)) : r.toString(16)}${g.toString(16).length === 1 ? '0'.concat(g.toString(16)) : g.toString(16)}${b.toString(16).length === 1 ? '0'.concat(b.toString(16)) : b.toString(16)}${alpha.toString(16).length === 1 ? '0'.concat(alpha.toString(16)) : alpha.toString(16)}`;
+        newPixelArray.push(rgb);
+        currentColor[rgb] = currentColor[rgb] ? currentColor[rgb] + 1 : 1;
+      }
+      currentColor = Object.keys(currentColor).reduce((a, b) => currentColor[a] > currentColor[b] ? a : b);
+      newPixelArray.forEach((e, i) => newPixelArray[i] = e === currentColor ? color : e);
 
-    for (let i = 0; i < pixelArray.length; i = i + 4) {
-      pixelArray[i] = parseInt(newPixelArray[i / 4].slice(0, 2), 16);
-      pixelArray[i + 1] = parseInt(newPixelArray[i / 4].slice(2, 4), 16);
-      pixelArray[i + 2] = parseInt(newPixelArray[i / 4].slice(4, 6), 16);
-      pixelArray[i + 3] = parseInt(newPixelArray[i / 4].slice(6, 8), 16);
+      for (let i = 0; i < pixelArray.length; i = i + 4) {
+        pixelArray[i] = parseInt(newPixelArray[i / 4].slice(0, 2), 16);
+        pixelArray[i + 1] = parseInt(newPixelArray[i / 4].slice(2, 4), 16);
+        pixelArray[i + 2] = parseInt(newPixelArray[i / 4].slice(4, 6), 16);
+        pixelArray[i + 3] = parseInt(newPixelArray[i / 4].slice(6, 8), 16);
+      }
+      this.backgroundColor = index;
+      this.context.putImageData(imageData, 0, 0);
+      this.newTexture.refresh();
+      this.props.scene.textures.get('piiixls').source[0].update();
     }
-    this.backgroundColor = index;
-    this.context.putImageData(imageData, 0, 0);
-    this.newTexture.refresh();
-    this.props.scene.textures.get('piiixls').source[0].update();
     // if (this.props.colorWallsCollider) {
     //     this.props.colorWallsCollider.destroy();
     // }
