@@ -28,6 +28,7 @@ export class Level extends Phaser.Scene {
   private configControls = ConfigControls.bind(this);
   private lastButtonPressed = 'Right';
   private levelData: ILevelInterface;
+  private jumpTimer = 0;
 
   private itemsAlreadyGetted = {
     palette: false,
@@ -107,7 +108,13 @@ export class Level extends Phaser.Scene {
           ball.setCollideWorldBounds(true);
           ball.body.onWorldBounds = true;
           ball.remove = ball.destroy;
-          setTimeout(() => enemy.hasShotted = false, 1500);
+          this.levelProperties.scene.time.addEvent({
+            delay: 1500,
+            loop: false,
+            callback() {
+              enemy.hasShotted = false;
+            },
+          });
         }
       }
     }, this);
@@ -115,8 +122,18 @@ export class Level extends Phaser.Scene {
 
   handleKeyboardDownInput() {
     if (!this.levelProperties.player.blockPlayer) {
-      if (this.levelProperties.cursors.up.isDown && this.levelProperties.player.body.blocked.down) {
-        this.levelProperties.player.setVelocityY(-450);
+      if (this.levelProperties.cursors.up.isDown) {
+        if (this.levelProperties.player.body.blocked.down && this.jumpTimer === 0) {
+          this.jumpTimer = 1;
+          this.levelProperties.player.setVelocityY(-250);
+        } else if (this.jumpTimer > 0 && this.jumpTimer < 14) {
+          this.jumpTimer++;
+          this.levelProperties.player.setVelocityY(-250 + (this.jumpTimer * -7));
+        } else {
+          this.jumpTimer = 0;
+        }
+      } else {
+        this.jumpTimer = 0;
       }
       if (this.levelProperties.cursors.left.isDown) {
         this.lastButtonPressed = 'Left';
@@ -222,7 +239,14 @@ export class Level extends Phaser.Scene {
       this.levelProperties.player.setVelocityX(Number(platform.body.velocity.x));
       this.levelProperties.player.body.blocked.down = true;
     }
-    setTimeout(() => this.levelProperties.player.isInAPlatform = false, 500);
+    this.levelProperties.scene.time.addEvent({
+      delay: 500,
+      loop: false,
+      callbackScope: this,
+      callback() {
+        this.levelProperties.player.isInAPlatform = false;
+      },
+    });
   }
 
   changeSpriteDirection(sprite: Phaser.Physics.Arcade.Sprite) {
@@ -245,11 +269,16 @@ export class Level extends Phaser.Scene {
       sprite.setAlpha(alfa);
       alfa = alfa ? 0 : 1;
     }, 100);
-    setTimeout(() => {
-      clearInterval(interval);
-      this.levelProperties.player.playerHitted = false;
-      sprite.setAlpha(1);
-    }, 2500);
+    this.levelProperties.scene.time.addEvent({
+      delay: 2500,
+      loop: false,
+      callbackScope: this,
+      callback() {
+        clearInterval(interval);
+        this.levelProperties.player.playerHitted = false;
+        sprite.setAlpha(1);
+      },
+    });
   }
 
   hitAFireball(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
@@ -268,7 +297,14 @@ export class Level extends Phaser.Scene {
         this.changeSpriteDirection(player);
         player.setVelocityY(-300);
         this.flashSprite(player);
-        setTimeout(() => player.blockPlayer = false, 1000);
+        this.levelProperties.scene.time.addEvent({
+          delay: 1000,
+          loop: false,
+          callbackScope: this,
+          callback() {
+            player.blockPlayer = false;
+          },
+        });
         this.updateColorWalls();
         // this.scene.start('level1');
       }
@@ -283,10 +319,15 @@ export class Level extends Phaser.Scene {
       this.changeSpriteDirection(player);
       player.setVelocityY(-300);
       this.flashSprite(player);
-      setTimeout(() => {
-        player.disableBody(true);
-        this.cameras.main.fadeOut(1500);
-      }, 200);
+      this.levelProperties.scene.time.addEvent({
+        delay: 200,
+        loop: false,
+        callbackScope: this,
+        callback() {
+          player.disableBody(true);
+          this.cameras.main.fadeOut(1500);
+          },
+      });
     } else {
       player.anims.play('piiixlsHit');
       this.levelProperties.player.piiixls.paint(-1);
@@ -322,10 +363,15 @@ export class Level extends Phaser.Scene {
         this.changeSpriteDirection(player);
         player.setVelocityY(-300);
         this.flashSprite(player);
-        setTimeout(() => {
-          player.disableBody(true);
-          this.cameras.main.fadeOut(1500);
-        }, 200);
+        this.levelProperties.scene.time.addEvent({
+          delay: 200,
+          loop: false,
+          callbackScope: this,
+          callback() {
+            player.disableBody(true);
+            this.cameras.main.fadeOut(1500);
+            },
+        });
       } else {
         player.anims.play('piiixlsHit');
         player.piiixls.paint(-1);
@@ -334,7 +380,14 @@ export class Level extends Phaser.Scene {
         this.changeSpriteDirection(player);
         player.setVelocityY(-300);
         this.flashSprite(player);
-        setTimeout(() => player.blockPlayer = false, 1000);
+        this.levelProperties.scene.time.addEvent({
+          delay: 1000,
+          loop: false,
+          callbackScope: this,
+          callback() {
+            player.blockPlayer = false;
+          },
+        });
         this.updateColorWalls();
         // this.scene.start('level1');
       }
