@@ -265,16 +265,21 @@ export class Level extends Phaser.Scene {
 
   flashSprite(sprite: Phaser.Physics.Arcade.Sprite) {
     let alfa = 0;
-    const interval = setInterval(() => {
-      sprite.setAlpha(alfa);
-      alfa = alfa ? 0 : 1;
-    }, 100);
+    const interval = this.levelProperties.scene.time.addEvent({
+      delay: 100,
+      loop: true,
+      callbackScope: this,
+      callback() {
+        sprite.setAlpha(alfa);
+        alfa = alfa ? 0 : 1;
+        },
+    });
     this.levelProperties.scene.time.addEvent({
       delay: 2500,
       loop: false,
       callbackScope: this,
       callback() {
-        clearInterval(interval);
+        interval.destroy();
         this.levelProperties.player.playerHitted = false;
         sprite.setAlpha(1);
       },
@@ -308,6 +313,12 @@ export class Level extends Phaser.Scene {
         this.updateColorWalls();
         // this.scene.start('level1');
       }
+    }
+  }
+
+  hitSpring(player: PlayerObject, spring: Phaser.Physics.Arcade.Sprite) {
+    if (spring.body.touching.up && player.body.touching.down) {
+      this.levelProperties.player.setVelocityY(-1000);
     }
   }
 

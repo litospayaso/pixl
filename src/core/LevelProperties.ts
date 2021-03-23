@@ -14,6 +14,7 @@ export class LevelProperties {
   items: Phaser.GameObjects.Group;
   colorWalls: Phaser.Physics.Arcade.Group;
   spikes: Phaser.Physics.Arcade.StaticGroup;
+  springs: Phaser.Physics.Arcade.StaticGroup;
   finishPlatform: Phaser.Physics.Arcade.StaticGroup;
   colorWallsCollider: any;
   levelData: ILevelInterface;
@@ -29,6 +30,7 @@ export class LevelProperties {
     this.shifters = this.scene.physics.add.group({ allowGravity: false });
     this.items = this.scene.physics.add.group({ allowGravity: false });
     this.spikes = this.scene.physics.add.staticGroup();
+    this.springs = this.scene.physics.add.staticGroup();
     this.finishPlatform = this.scene.physics.add.staticGroup();
     this.levelData = levelData;
   }

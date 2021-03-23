@@ -34,6 +34,7 @@ export const ConfigColliders = function(props: LevelProperties) {
     props.scene.physics.add.collider(props.enemies, props.enemyWalls, this.changeSpriteDirection);
     props.scene.physics.add.collider(props.player, props.enemies, this.hitAnEnemy, () => !props.player.playerHitted, this);
     props.scene.physics.add.collider(props.player, props.fireballs, this.hitAFireball, () => !props.player.playerHitted, this);
+    props.scene.physics.add.collider(props.player, props.springs, this.hitSpring, () => true, this);
     props.scene.physics.add.collider(props.player, props.spikes, this.hitSpikes, () => !props.player.playerHitted, this);
     props.scene.physics.add.overlap(props.player, props.finishPlatform, this.collideFinishPlatform, null, this);
     props.scene.physics.add.overlap(props.player, props.items, this.itemCollision, null, this);

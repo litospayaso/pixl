@@ -41,6 +41,9 @@ export const ConfigItems = function(props: LevelProperties) {
           props.scene.add.sprite(item.x, item.y, 'sparkles')
             .setScale(1).anims.play('animateSparkles');
           break;
+        case 'spring':
+          const spring = props.springs.create(item.x, item.y, 'spring').setFrame(2).setScale(1.5);
+          break;
         default:
           break;
       }
