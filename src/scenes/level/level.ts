@@ -1,9 +1,8 @@
+// import { colorWheel } from '@/core/Piiixls';
 import { ILevelInterface, ItemImterface } from '@/assets/levels/IlevelInterface';
-// import levelData from '@/assets/levels/level1.json';
 import { AnimateSprites } from '@/core/AnimateSprites';
 import { ConfigControls } from '@/core/configControls';
 import { LevelProperties } from '@/core/LevelProperties';
-import { colorWheel } from '@/core/Piiixls';
 import { PlayerObject } from '@/core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
@@ -29,6 +28,7 @@ export class Level extends Phaser.Scene {
   private lastButtonPressed = 'Right';
   private levelData: ILevelInterface;
   private jumpTimer = 0;
+  private playerFirstTouch = true;
 
   private itemsAlreadyGetted = {
     palette: false,
@@ -58,6 +58,8 @@ export class Level extends Phaser.Scene {
     this.configPlayer(this.levelProperties);
     this.configColliders(this.levelProperties);
     this.configControls(this.levelProperties);
+
+    // this.levelProperties.player.setDepth(10);
     // this.handleBrowserFocus();
   }
 
@@ -92,6 +94,9 @@ export class Level extends Phaser.Scene {
     // this.positionText.setText(`x: ${this.levelProperties.player.x};y: ${this.levelProperties.player.y};`);
     this.handleKeyboardDownInput();
     this.enemyShotFireball();
+    if (!(this.levelProperties.player.body as any).onFloor()) {
+      this.playerFirstTouch = true;
+    }
   }
 
   enemyShotFireball() {
@@ -124,6 +129,7 @@ export class Level extends Phaser.Scene {
     if (!this.levelProperties.player.blockPlayer) {
       if (this.levelProperties.cursors.up.isDown) {
         if (this.levelProperties.player.body.blocked.down && this.jumpTimer === 0) {
+          this.levelProperties.player.piiixls.particlesOnJump();
           this.jumpTimer = 1;
           this.levelProperties.player.setVelocityY(-250);
         } else if (this.jumpTimer > 0 && this.jumpTimer < 14) {
@@ -272,7 +278,7 @@ export class Level extends Phaser.Scene {
       callback() {
         sprite.setAlpha(alfa);
         alfa = alfa ? 0 : 1;
-        },
+      },
     });
     this.levelProperties.scene.time.addEvent({
       delay: 2500,
@@ -291,28 +297,7 @@ export class Level extends Phaser.Scene {
     if (enemy.body.touching.up && player.body.touching.down) {
       this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -350 : -220);
     } else {
-      if (player.piiixls.getColor() === -1) {
-        player.anims.play('piiixlsDie');
-        // player.disableBody(true);
-        // this.cameras.main.fadeOut(1500);
-      } else {
-        player.anims.play('piiixlsHit');
-        this.levelProperties.player.piiixls.paint(-1);
-        player.blockPlayer = player.playerHitted = true;
-        this.changeSpriteDirection(player);
-        player.setVelocityY(-300);
-        this.flashSprite(player);
-        this.levelProperties.scene.time.addEvent({
-          delay: 1000,
-          loop: false,
-          callbackScope: this,
-          callback() {
-            player.blockPlayer = false;
-          },
-        });
-        this.updateColorWalls();
-        // this.scene.start('level1');
-      }
+      this.playerHitted();
     }
   }
 
@@ -323,40 +308,7 @@ export class Level extends Phaser.Scene {
   }
 
   hitSpikes(player: PlayerObject, spikes: Phaser.Physics.Arcade.Sprite) {
-    if (player.piiixls.getColor() === -1) {
-      player.anims.play('piiixlsHit');
-      player.piiixls.paint(-1);
-      player.blockPlayer = player.playerHitted = true;
-      this.changeSpriteDirection(player);
-      player.setVelocityY(-300);
-      this.flashSprite(player);
-      this.levelProperties.scene.time.addEvent({
-        delay: 200,
-        loop: false,
-        callbackScope: this,
-        callback() {
-          player.disableBody(true);
-          this.cameras.main.fadeOut(1500);
-          },
-      });
-    } else {
-      player.anims.play('piiixlsHit');
-      this.levelProperties.player.piiixls.paint(-1);
-      player.blockPlayer = player.playerHitted = true;
-      this.changeSpriteDirection(player);
-      player.setVelocityY(-300);
-      this.flashSprite(player);
-      this.levelProperties.scene.time.addEvent({
-        delay: 1000,
-        loop: false,
-        callback() {
-          player.blockPlayer = false;
-        },
-      });
-      // setTimeout(() => player.blockPlayer = false, 1000);
-      this.updateColorWalls();
-      // this.scene.start('level1');
-    }
+    this.playerHitted();
   }
 
   hitAnEnemy(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
@@ -366,42 +318,15 @@ export class Level extends Phaser.Scene {
       // enemy.destroy();
       // enemy.disableBody(true, true);
     } else {
-      if (player.piiixls.getColor() === -1) {
-        player.anims.play('piiixlsHit');
-        player.piiixls.paint(-1);
-        player.blockPlayer = player.playerHitted = true;
-        this.changeSpriteDirection(enemy);
-        this.changeSpriteDirection(player);
-        player.setVelocityY(-300);
-        this.flashSprite(player);
-        this.levelProperties.scene.time.addEvent({
-          delay: 200,
-          loop: false,
-          callbackScope: this,
-          callback() {
-            player.disableBody(true);
-            this.cameras.main.fadeOut(1500);
-            },
-        });
-      } else {
-        player.anims.play('piiixlsHit');
-        player.piiixls.paint(-1);
-        player.blockPlayer = player.playerHitted = true;
-        this.changeSpriteDirection(enemy);
-        this.changeSpriteDirection(player);
-        player.setVelocityY(-300);
-        this.flashSprite(player);
-        this.levelProperties.scene.time.addEvent({
-          delay: 1000,
-          loop: false,
-          callbackScope: this,
-          callback() {
-            player.blockPlayer = false;
-          },
-        });
-        this.updateColorWalls();
-        // this.scene.start('level1');
-      }
+      this.changeSpriteDirection(enemy);
+      this.playerHitted();
+    }
+  }
+
+  onPlayerCollision() {
+    if (this.playerFirstTouch) {
+      this.levelProperties.player.piiixls.particlesOnJump();
+      this.playerFirstTouch = false;
     }
   }
 
@@ -413,6 +338,46 @@ export class Level extends Phaser.Scene {
         this.scene.pause();
       }
     }, false);
+  }
+
+  playerHitted() {
+    this.levelProperties.scene.cameras.main.shake(300, 0.005);
+    if (this.levelProperties.player.piiixls.getColor() === -1) {
+      this.levelProperties.player.anims.play('piiixlsHit');
+      // this.levelProperties.player.piiixls.paint(-1);
+      this.levelProperties.player.blockPlayer = this.levelProperties.player.playerHitted = true;
+      this.changeSpriteDirection(this.levelProperties.player);
+      this.levelProperties.player.setVelocityY(-300);
+      this.flashSprite(this.levelProperties.player);
+      this.levelProperties.scene.time.addEvent({
+        delay: 200,
+        loop: false,
+        callbackScope: this,
+        callback() {
+          this.levelProperties.player.disableBody(true);
+          this.cameras.main.fadeOut(1500);
+        },
+      });
+    } else {
+      // this.levelProperties.scene.cameras.main.shake
+      // this.levelProperties.scene.cameras.main.shakeEffect.intensity = {x: 0.01, y:0.01};
+      this.levelProperties.player.anims.play('piiixlsHit');
+      this.levelProperties.player.piiixls.particlesOnHit();
+      this.levelProperties.player.piiixls.paint(-1);
+      this.levelProperties.player.blockPlayer = this.levelProperties.player.playerHitted = true;
+      this.changeSpriteDirection(this.levelProperties.player);
+      this.levelProperties.player.setVelocityY(-300);
+      this.flashSprite(this.levelProperties.player);
+      this.updateColorWalls();
+      this.levelProperties.scene.time.addEvent({
+        delay: 1000,
+        loop: false,
+        callbackScope: this,
+        callback() {
+          this.levelProperties.player.blockPlayer = false;
+        },
+      });
+    }
   }
 
   updateColorWalls() {

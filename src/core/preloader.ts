@@ -14,6 +14,8 @@ export class Preloader extends Phaser.Scene {
         this.load.image('level3-background', 'assets/levels/level3/level3-background-image.png');
         this.load.image('ground', 'assets/sprites/platform.png');
         this.load.image('spikes', 'assets/sprites/spikes.png');
+        this.load.image('white_particles', 'assets/sprites/white-particle.png');
+        this.load.atlas('flares', 'assets/sprites/flares.png', 'assets/sprites/flares.json');
         this.load.image('player', 'assets/sprites/player.png');
         this.load.image('transparent', 'assets/sprites/transparent.png');
         this.load.image('leftControl', 'assets/sprites/controllers/left.png');

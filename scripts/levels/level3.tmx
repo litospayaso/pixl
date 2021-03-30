@@ -200,7 +200,7 @@
   </object>
  </objectgroup>
  <objectgroup id="3" name="player">
-  <object id="1" name="initialPosition" x="2345" y="1206">
+  <object id="1" name="initialPosition" x="986" y="1257">
    <properties>
     <property name="color" type="int" value="0"/>
    </properties>
