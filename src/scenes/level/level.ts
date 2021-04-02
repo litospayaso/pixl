@@ -3,6 +3,7 @@ import { ILevelInterface, ItemImterface } from '@/assets/levels/IlevelInterface'
 import { AnimateSprites } from '@/core/AnimateSprites';
 import { ConfigControls } from '@/core/configControls';
 import { LevelProperties } from '@/core/LevelProperties';
+import { colorWheel } from '@/core/Piiixls';
 import { PlayerObject } from '@/core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
@@ -29,6 +30,7 @@ export class Level extends Phaser.Scene {
   private levelData: ILevelInterface;
   private jumpTimer = 0;
   private playerFirstTouch = true;
+  private previousPlayerSpeed = 0;
 
   private itemsAlreadyGetted = {
     palette: false,
@@ -86,7 +88,9 @@ export class Level extends Phaser.Scene {
     // this.positionText = this.add.text(16, 50, 'x: 0; y: 0', { fontSize: '32px', fill: '#0000FF' }).setScrollFactor(0);
 
     this.inputKeyboard();
-
+    this.lights.enable();
+    this.lights.setAmbientColor(0x808080);
+    const light = this.lights.addLight(this.levelProperties.player.body.x, this.levelProperties.player.body.y, 200);
     this.cameras.main.on('camerafadeoutcomplete', () => this.scene.start(this.levelData.properties.find((e) => e.name === 'key').value));
   }
 
@@ -94,6 +98,13 @@ export class Level extends Phaser.Scene {
     // this.positionText.setText(`x: ${this.levelProperties.player.x};y: ${this.levelProperties.player.y};`);
     this.handleKeyboardDownInput();
     this.enemyShotFireball();
+    if (this.previousPlayerSpeed + this.levelProperties.player.body.velocity.x === 0 &&
+        (this.previousPlayerSpeed !== 0 && this.levelProperties.player.body.velocity.x !== 0) &&
+        (this.levelProperties.player.body as any).onFloor()
+      ) {
+      this.levelProperties.player.piiixls.particlesOnJump();
+    }
+    this.previousPlayerSpeed = this.levelProperties.player.body.velocity.x;
     if (!(this.levelProperties.player.body as any).onFloor()) {
       this.playerFirstTouch = true;
     }
@@ -108,11 +119,35 @@ export class Level extends Phaser.Scene {
         if (!enemy.hasShotted) {
           enemy.hasShotted = true;
           const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'pixelBall').setScale(1.5);
+          // const particles = this.levelProperties.scene.add.particles('white_particles');
+          // const emitter = particles.createEmitter({
+          //   y: 20,
+          //   x: 20,
+          //   lifespan: 180,
+          //   scale: { start: 0.5, end: 0 },
+          //   gravityY: 300,
+          //   quantity: 1,
+          //   tint: colorWheel.map((e) => Number(`0x${e.slice(0, -2)}`)),
+          //   blendMode: 'NORMAL',
+          // });
           ball.anims.play('shootPixelBall');
           ball.setVelocityX(enemy.body.velocity.x * 2);
           ball.setCollideWorldBounds(true);
+          ball.setDepth(4);
+          // emitter.startFollow(ball);
           ball.body.onWorldBounds = true;
           ball.remove = ball.destroy;
+          // ball.on('destroy', (input) => {
+          //   console.log(`%c emitter`, `background: #df03fc; color: #f8fc03`, emitter);
+          //   console.log(`%c input`, `background: #df03fc; color: #f8fc03`, input);
+          //   emitter.explode();
+          //   emitter.remove();
+          //   emitter._visible = false;
+          //   emitter.stop();
+          //   emitter.stopFollow();
+          //   emitter.killAll();
+          //   particles.setDepth(-3);
+          // });
           this.levelProperties.scene.time.addEvent({
             delay: 1500,
             loop: false,
@@ -293,6 +328,7 @@ export class Level extends Phaser.Scene {
   }
 
   hitAFireball(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
+    enemy.body.destroy();
     enemy.disableBody(true, true);
     if (enemy.body.touching.up && player.body.touching.down) {
       this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -350 : -220);
@@ -323,8 +359,8 @@ export class Level extends Phaser.Scene {
     }
   }
 
-  onPlayerCollision() {
-    if (this.playerFirstTouch) {
+  onPlayerCollision(player: PlayerObject) {
+    if (this.playerFirstTouch && player.body.blocked.down) {
       this.levelProperties.player.piiixls.particlesOnJump();
       this.playerFirstTouch = false;
     }
