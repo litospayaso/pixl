@@ -8,6 +8,7 @@ import { PlayerObject } from '@/core/PlayerObject';
 import { ConfigColliders } from './ConfigColliders';
 import { ConfigEnemies } from './ConfigEnemies';
 import { ConfigItems } from './ConfigItems';
+import { ParticlesSystem } from './configParticles';
 import { ConfigPlatforms } from './ConfigPlatforms';
 import { ConfigPlayer } from './ConfigPlayer';
 
@@ -31,6 +32,7 @@ export class Level extends Phaser.Scene {
   private jumpTimer = 0;
   private playerFirstTouch = true;
   private previousPlayerSpeed = 0;
+  private particlesSystem;
 
   private itemsAlreadyGetted = {
     palette: false,
@@ -44,6 +46,7 @@ export class Level extends Phaser.Scene {
       key: levelData.properties.find((e) => e.name === 'key').value,
     });
     this.levelData = levelData;
+    this.particlesSystem = ParticlesSystem;
   }
   // initialize() {}
 
@@ -99,10 +102,10 @@ export class Level extends Phaser.Scene {
     this.handleKeyboardDownInput();
     this.enemyShotFireball();
     if (this.previousPlayerSpeed + this.levelProperties.player.body.velocity.x === 0 &&
-        (this.previousPlayerSpeed !== 0 && this.levelProperties.player.body.velocity.x !== 0) &&
-        (this.levelProperties.player.body as any).onFloor()
-      ) {
-      this.levelProperties.player.piiixls.particlesOnJump();
+      (this.previousPlayerSpeed !== 0 && this.levelProperties.player.body.velocity.x !== 0) &&
+      (this.levelProperties.player.body as any).onFloor()
+    ) {
+      this.particlesSystem.particlesOnJump(this.levelProperties);
     }
     this.previousPlayerSpeed = this.levelProperties.player.body.velocity.x;
     if (!(this.levelProperties.player.body as any).onFloor()) {
@@ -119,35 +122,12 @@ export class Level extends Phaser.Scene {
         if (!enemy.hasShotted) {
           enemy.hasShotted = true;
           const ball = this.levelProperties.fireballs.create(enemy.x, enemy.y, 'pixelBall').setScale(1.5);
-          // const particles = this.levelProperties.scene.add.particles('white_particles');
-          // const emitter = particles.createEmitter({
-          //   y: 20,
-          //   x: 20,
-          //   lifespan: 180,
-          //   scale: { start: 0.5, end: 0 },
-          //   gravityY: 300,
-          //   quantity: 1,
-          //   tint: colorWheel.map((e) => Number(`0x${e.slice(0, -2)}`)),
-          //   blendMode: 'NORMAL',
-          // });
-          ball.anims.play('shootPixelBall');
+          this.particlesSystem.particlesForFireball(this.levelProperties, ball);
           ball.setVelocityX(enemy.body.velocity.x * 2);
           ball.setCollideWorldBounds(true);
           ball.setDepth(4);
-          // emitter.startFollow(ball);
           ball.body.onWorldBounds = true;
           ball.remove = ball.destroy;
-          // ball.on('destroy', (input) => {
-          //   console.log(`%c emitter`, `background: #df03fc; color: #f8fc03`, emitter);
-          //   console.log(`%c input`, `background: #df03fc; color: #f8fc03`, input);
-          //   emitter.explode();
-          //   emitter.remove();
-          //   emitter._visible = false;
-          //   emitter.stop();
-          //   emitter.stopFollow();
-          //   emitter.killAll();
-          //   particles.setDepth(-3);
-          // });
           this.levelProperties.scene.time.addEvent({
             delay: 1500,
             loop: false,
@@ -164,7 +144,7 @@ export class Level extends Phaser.Scene {
     if (!this.levelProperties.player.blockPlayer) {
       if (this.levelProperties.cursors.up.isDown) {
         if (this.levelProperties.player.body.blocked.down && this.jumpTimer === 0) {
-          this.levelProperties.player.piiixls.particlesOnJump();
+          this.particlesSystem.particlesOnJump(this.levelProperties);
           this.jumpTimer = 1;
           this.levelProperties.player.setVelocityY(-250);
         } else if (this.jumpTimer > 0 && this.jumpTimer < 14) {
@@ -328,7 +308,7 @@ export class Level extends Phaser.Scene {
   }
 
   hitAFireball(player: PlayerObject, enemy: Phaser.Physics.Arcade.Sprite) {
-    enemy.body.destroy();
+    (enemy as any).emitter.remove();
     enemy.disableBody(true, true);
     if (enemy.body.touching.up && player.body.touching.down) {
       this.levelProperties.player.setVelocityY(this.levelProperties.cursors.up.isDown ? -350 : -220);
@@ -361,7 +341,7 @@ export class Level extends Phaser.Scene {
 
   onPlayerCollision(player: PlayerObject) {
     if (this.playerFirstTouch && player.body.blocked.down) {
-      this.levelProperties.player.piiixls.particlesOnJump();
+      this.particlesSystem.particlesOnJump(this.levelProperties);
       this.playerFirstTouch = false;
     }
   }
@@ -398,7 +378,7 @@ export class Level extends Phaser.Scene {
       // this.levelProperties.scene.cameras.main.shake
       // this.levelProperties.scene.cameras.main.shakeEffect.intensity = {x: 0.01, y:0.01};
       this.levelProperties.player.anims.play('piiixlsHit');
-      this.levelProperties.player.piiixls.particlesOnHit();
+      this.particlesSystem.particlesOnHit(this.levelProperties);
       this.levelProperties.player.piiixls.paint(-1);
       this.levelProperties.player.blockPlayer = this.levelProperties.player.playerHitted = true;
       this.changeSpriteDirection(this.levelProperties.player);

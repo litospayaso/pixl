@@ -168,41 +168,7 @@ export const Piiixls = {
   //     this.newTexture.refresh();
   //     this.props.scene.textures.get('piiixls').source[0].update();
   // },
-  particlesOnHit() {
-    const particles = this.props.scene.add.particles('white_particles');
-    const emitter = particles.createEmitter({
-      x: 400,
-      y: 300,
-      speed: { min: -800, max: 800 },
-      angle: { min: 0, max: 360 },
-      scale: { start: 0.4, end: 0 },
-      blendMode: 'SCREEN',
-      quantity: 35,
-      tint: this.getColor() !== -1 ? Number(`0x${colorWheel[this.getColor()].slice(0, -2)}`) : 0xffffff,
-      lifespan: 600,
-      gravityY: 300,
-    });
 
-    const { x, y } = this.props.player.body.position;
-    emitter.setPosition(x, y);
-    emitter.explode();
-  },
-
-  particlesOnJump() {
-    const { x, y } = this.props.player.body.position;
-    const particles = this.props.scene.add.particles('white_particles');
-    const emitter = particles.createEmitter({
-      y: y + 20,
-      x: { min: x + 0, max: x + 40 },
-      lifespan: 1000,
-      speedY: { min: 0, max: 20 },
-      scale: { start: 0.4, end: 0 },
-      quantity: 3,
-      blendMode: 'ADD',
-    });
-
-    emitter.explode();
-  },
 
 };
 
@@ -212,8 +178,6 @@ export interface IPiiixls {
   paint: (string) => void;
   addColor: (string) => void;
   animSprites: () => void;
-  particlesOnHit: () => void;
-  particlesOnJump: () => void;
   getColor: () => number;
   getNonCollidingItems: () => number[];
 }
