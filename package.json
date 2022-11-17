@@ -31,7 +31,7 @@
     "express": "^4.16.3",
     "file-loader": "^1.1.11",
     "gh-pages": "^3.1.0",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "style-loader": "^0.18.2",
     "ts-loader": "^5.2.1",
     "typescript": "^3.1.1",
